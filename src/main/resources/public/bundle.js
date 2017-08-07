@@ -46883,6 +46883,14 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+function hasChildren(node) {
+  return node && (node.children || node.props && node.props.children);
+}
+
+function getChildren(node) {
+  return node && node.children ? node.children : node.props && node.props.children;
+}
+
 function nodesToString(mem, children, index) {
   if (Object.prototype.toString.call(children) !== '[object Array]') children = [children];
 
@@ -46893,8 +46901,8 @@ function nodesToString(mem, children, index) {
 
     if (typeof child === 'string') {
       mem = '' + mem + child;
-    } else if (child.props && child.props.children) {
-      mem = mem + '<' + elementKey + '>' + nodesToString('', child.props.children, i + 1) + '</' + elementKey + '>';
+    } else if (hasChildren(child)) {
+      mem = mem + '<' + elementKey + '>' + nodesToString('', getChildren(child), i + 1) + '</' + elementKey + '>';
     } else if (_react2.default.isValidElement(child)) {
       mem = mem + '<' + elementKey + '></' + elementKey + '>';
     } else if ((typeof child === 'undefined' ? 'undefined' : _typeof(child)) === 'object') {
@@ -46917,7 +46925,7 @@ function nodesToString(mem, children, index) {
 var REGEXP = new RegExp('(?:<([^>]*)>(.*?)<\\/\\1>)', 'gi');
 function renderNodes(children, targetString, i18n) {
 
-  function getChildren(nodes, str) {
+  function parseChildren(nodes, str) {
     if (Object.prototype.toString.call(nodes) !== '[object Array]') nodes = [nodes];
 
     var toRender = str.split(REGEXP).reduce(function (mem, match, i) {
@@ -46931,7 +46939,7 @@ function renderNodes(children, targetString, i18n) {
       var previousIsTag = i > 0 ? !isNaN(toRender[i - 1]) : false;
       if (previousIsTag) {
         var child = nodes[parseInt(toRender[i - 1], 10)] || {};
-        if (child.props && !child.props.children) previousIsTag = false;
+        if (_react2.default.isValidElement(child) && !hasChildren(child)) previousIsTag = false;
       }
 
       // will be rendered inside child
@@ -46943,8 +46951,8 @@ function renderNodes(children, targetString, i18n) {
 
         if (typeof _child === 'string') {
           mem.push(_child);
-        } else if (_child.props && _child.props.children) {
-          var inner = getChildren(_child.props && _child.props.children, toRender[i + 1]);
+        } else if (hasChildren(_child)) {
+          var inner = parseChildren(getChildren(_child), toRender[i + 1]);
 
           mem.push(_react2.default.cloneElement(_child, _extends({}, _child.props, { key: i }), inner));
         } else if ((typeof _child === 'undefined' ? 'undefined' : _typeof(_child)) === 'object' && !isElement) {
@@ -46962,7 +46970,7 @@ function renderNodes(children, targetString, i18n) {
     }, []);
   }
 
-  return getChildren(children, targetString);
+  return parseChildren(children, targetString);
 }
 
 var Trans = function (_React$Component) {
