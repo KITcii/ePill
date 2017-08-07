@@ -77,9 +77,20 @@ public class TailoredText {
 	}
 
 	public void personalize(User user) {
-		this.text = this.text.replace("%firstname%", user.getFirstname())
-				.replace("%lastname%", user.getLastname())
-				.replace("%age%", Integer.toString(user.getAge()));	
+		
+		if(user == null || this.text == null)
+			return;
+		
+		try {
+		
+			this.text = this.text.replace("%firstname%", user.getFirstname())
+					.replace("%lastname%", user.getLastname())
+					.replace("%age%", Integer.toString(user.getAge()));	
+		} catch(NullPointerException e) {
+			
+			System.out.println(user+"\n"+this);
+			e.printStackTrace();
+		}
 	}
 	
 	/*

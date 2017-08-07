@@ -80,7 +80,6 @@ import com.doccuty.epill.model.DrugFeature;
       result.append(" ").append(this.getLastname());
       result.append(" ").append(this.getUsername());
       result.append(" ").append(this.getEmail());
-      result.append(" ").append(this.getPreferredFontSize());
       result.append(" ").append(this.getLevelOfDetail());
       return super.toString() + result.substring(1);
    }

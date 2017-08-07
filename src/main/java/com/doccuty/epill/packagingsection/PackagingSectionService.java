@@ -66,12 +66,13 @@ public class PackagingSectionService {
 		
 		Drug drug = drugService.findDrugById(drugId);
 		PackagingTopic topic = topicRepository.findOne(topicId);
-		User user = userService.getCurrentUser();
 		
 		PackagingSection section = repository.findByTopicAndDrug(topic, drug);
 		
 		if(section == null)
 			return null;
+
+		User user = userService.getUserById(userService.getCurrentUser().getId());
 		
 		PackagingSection tailoredSection = serviceSummary.findTailoredPackagingSummary(drug, section, user);
 		
