@@ -1,0 +1,709 @@
+html {
+	position: relative;
+	min-height: 100%;
+	background-color: rgb(255, 255, 255);
+}
+
+body { margin-bottom: 330px; }
+
+a:link { color: #087c74; text-decoration: none; }
+
+a:visited { color: #000000; }
+
+a:hover { color: #08746d; }
+
+a:active { color: #0ca49a; }
+
+
+span.close {
+	float:right;
+    display:inline-block;
+    padding:1px 1px;
+}
+
+span.close:hover {
+    color: #0f0f0f;
+}
+
+h4 a { cursor: pointer; }
+
+li a.dropdown-toggle {
+	cursor: pointer;
+}
+
+
+span.enumeration {
+	margin-right:4px;
+}
+
+
+.no-padding {
+	padding: 0px;	
+}
+
+/* classes to modify document font-size */
+
+.minFontSize {
+	font-size: 80%;
+}
+
+.defaultFontSize {
+	font-size: 100%;
+}
+
+.maxFontSize {
+	font-size: 120%;
+}
+
+.margin-s {
+	margin-top: 8px;
+}
+
+.btn-group {
+	padding-left: 0px;
+}
+
+a.wide { display : block }
+
+.white { color:#fff; }
+
+.checkbox-grid li {
+    display: block;
+    float: left;
+    width: 25%;
+}
+
+.text-box {
+	border: 1px solid #eeeeee;
+	border-radius: 4px;
+	padding:10px;
+	margin-bottom:20px;
+}
+
+.logo {
+	height:auto;
+	width:100%;
+	margin-top: -8px;
+}
+
+.small-text { font-size: 80%; }
+
+.medium-text { font-size: 100%; }
+
+.big-text { font-size: 120%; }
+
+/* */
+.drug-features {
+	
+}
+
+.drug-features .drug-feature-icon {
+	height:auto;
+	width:25px;
+	margin-right:10px;
+}
+
+/* drug list styling */
+.drug-list {
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+.drug-list>li {
+	background-color: rgb(255, 255, 255);
+	padding: 0px;
+	margin: 0px 0px 20px;
+}
+
+.drug-list>li>div>.action-pattern {
+	background-color: rgb(255, 255, 255);
+}
+
+.drug-list>li>div>.info>ul, .drug-list>li>div>.action-pattern>ul {
+	display: table;
+	list-style: none;
+	margin: 10px 0px 0px;
+	padding: 0px;
+	width: 100%;
+	text-align: center;
+}
+
+.drug-list>li>div>.action-pattern>ul {
+	margin: 0px;
+}
+
+.drug-list>li>div>.info>ul>li, .drug-list>li>div>.action-pattern>ul>li {
+	display: table-cell;
+	padding: 0px 0px;
+}
+
+.drug-list>li>div>.info>ul>li>button {
+	display: block;
+}
+
+.drug-list>li>div>.action-pattern>ul>li {
+	padding: 0px;
+}	
+		
+.drug-list>li>div>.action-pattern>ul>li>button {
+	width:100%;
+	height:30px;
+}
+
+.drug-list>li section.minimum-summary {
+	margin: 10px 0px;
+}
+
+.drug-list>li section.diseases {
+	margin: 0px 0px 10px 0px;
+}
+
+.btn-like {
+	background-color: #ff7884;
+}
+
+.btn-add {
+	background-color: #11a59b;
+}
+
+
+.drug-list>li>div>.action-pattern>ul>li>button.btn-open {
+	background-color: #00cbcd;
+}
+
+.dropdown-toggle {
+	max-width: 50px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.dropdown-toggle>p {
+	height:50px;
+}
+
+@media ( min-width: 768px) {
+	.dropdown-toggle {
+		width:100%;
+	}
+	
+	.drug-list>li {
+		position: relative;
+		display: block;
+		width: 100%;
+		padding: 0px;
+	}
+	
+	.drug-list>li>div.image-container {
+		display: block;
+		margin:0px;
+		padding:0px 10px 0px 0px;
+	}
+	
+	.drug-list>li>div>.info {
+		background-color: rgb(255, 255, 255);
+		text-align: left;
+		padding-right: 30px;
+	}
+	
+	.drug-list>li>div>.info h4 {
+		margin-top: 0px;
+	}
+
+	.drug-list>li>div>.action-pattern {
+		position: absolute;
+		top: 0px;
+		right: 0px;
+		display: block;
+		width: 30px;
+		height: 100%;
+	}
+	
+	.drug-list>li>div>.action-pattern>ul {
+		height: 100%;
+	}
+	
+	.drug-list>li>div>.action-pattern>ul>li {
+		display: block;
+		padding: 0px;
+		height: 30px;
+	}
+}
+
+/* Drug detail styling */
+
+.drug-detail-short-links ul {
+	padding: 0;
+	margin: 0;
+}
+
+.drug-detail-short-links ul li {
+	list-style: none;
+}
+
+
+
+.drug-detail-header section.diseases {
+	margin: 0px 0px 10px 0px;
+}
+
+.drug-detail-header .additional-information p {
+	text-align:right;
+}
+
+.drug-detail-header .additional-information p a {
+	cursor: pointer;
+}
+
+
+/* ------------------- Checkbox Styling ------------------- */
+.form-group input[type="checkbox"] {
+	display: none;
+}
+
+.form-group input[type="checkbox"]+.btn-group>label span {
+	width: 20px;
+}
+
+.form-group input[type="checkbox"]+.btn-group>label span:first-child {
+	display: none;
+}
+
+.form-group input[type="checkbox"]+.btn-group>label span:last-child {
+	display: inline-block;
+}
+
+.form-group input[type="checkbox"]:checked+.btn-group>label span:first-child {
+	display: inline-block;
+}
+
+.form-group input[type="checkbox"]:checked+.btn-group>label span:last-child
+	{
+	display: none;
+}
+
+
+.list-group label {
+	width: 100%;
+	text-align:left;
+}
+
+/* ------------------- Carousel Styling ------------------- */
+
+/* GLOBAL STYLES
+-------------------------------------------------- */
+/* Padding below the footer and lighter body text */
+
+/* CUSTOMIZE THE NAVBAR
+-------------------------------------------------- */
+
+/* Special class on .container surrounding .navbar, used for positioning it into place. */
+.navbar-wrapper {
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	z-index: 20;
+}
+
+/* Flip around the padding for proper display in narrow viewports */
+.navbar-wrapper>.container {
+	padding-right: 0;
+	padding-left: 0;
+}
+
+.navbar-wrapper .navbar {
+	padding-right: 15px;
+	padding-left: 15px;
+}
+
+.navbar-wrapper .navbar .container {
+	width: auto;
+}
+
+/* CUSTOMIZE THE CAROUSEL
+-------------------------------------------------- */
+
+/* Carousel base class */
+.carousel {
+	height: 500px;
+	margin-bottom: 60px;
+}
+/* Since positioning the image, we need to help out the caption */
+.carousel-caption {
+	z-index: 10;
+}
+
+/* Declare heights because of positioning of img element */
+.carousel .item {
+	height: 500px;
+	background-color: #777;
+}
+
+.carousel-inner>.item>img {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	min-width: 100%;
+	min-height: 100%;
+	width:auto;
+}
+
+
+
+/* MARKETING CONTENT
+-------------------------------------------------- */
+
+/* Center align the text within the three columns below the carousel */
+.marketing {
+	padding-bottom: 60px;
+}
+
+.marketing .col-lg-4 {
+	margin-bottom: 20px;
+	text-align: center;
+}
+
+.marketing h2 {
+	font-weight: normal;
+}
+
+.marketing .col-lg-4 p {
+	margin-right: 10px;
+	margin-left: 10px;
+}
+
+/* Featurettes
+------------------------- */
+.featurette-divider {
+	margin: 80px 0; /* Space out the Bootstrap <hr> more */
+}
+
+/* Thin out the marketing headings */
+.featurette-heading {
+	font-weight: 300;
+	line-height: 1;
+	letter-spacing: -1px;
+}
+
+.featurette-image {
+	max-height:300px;
+}
+
+/* RESPONSIVE CSS
+-------------------------------------------------- */
+@media ( min-width : 768px) {
+	/* Navbar positioning foo */
+	.navbar-wrapper {
+		margin-top: 20px;
+	}
+	.navbar-wrapper .container {
+		padding-right: 15px;
+		padding-left: 15px;
+	}
+	.navbar-wrapper .navbar {
+		padding-right: 0;
+		padding-left: 0;
+	}
+
+	/* The navbar becomes detached from the top, so we round the corners */
+	.navbar-wrapper .navbar {
+		border-radius: 4px;
+	}
+
+	/* Bump up size of carousel content */
+	.carousel-caption p {
+		margin-bottom: 20px;
+		font-size: 21px;
+		line-height: 1.4;
+	}
+	.featurette-heading {
+		font-size: 50px;
+	}
+}
+
+@media ( min-width : 992px) {
+	.featurette-heading {
+		margin-top: 120px;
+	}
+	
+	.dropdown-toggle {
+		max-width: 250px;
+	}
+}
+
+.no-banner {
+	margin-top: 60px;
+	margin-bottom: 40px;
+	padding-bottom: 40px;
+}
+
+/* footer styling */
+.footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 330px;
+	margin-top: 40px;
+	padding-top: 20px;
+	border-top: 10px solid #332e20;
+}
+
+.footer .list-inline li:not(:first-child):not(:last-child) {
+	border-right:1px solid lightgray;
+}
+.footer-section {
+	margin-bottom: 20px;
+	padding-bottom: 20px;
+	border-bottom: 1px solid lightgray;
+}
+
+.bottom-rule {
+	border-bottom: 1px solid lightgray;
+}
+
+.navbar-footer {
+	background-color: inherit;
+	border-radius: 0;
+	border: none;
+}
+
+.leg-room {
+	margin-bottom: 20px;
+	padding-bottom: 20px;
+}
+
+@media ( min-width : 768px) {
+	.footer-section {
+		margin-bottom: 0;
+		padding-bottom: 0;
+		border-bottom: none;
+	}
+	.navbar-footer {
+		margin-bottom: 0;
+		text-align: center;
+	}
+	footer .navbar .navbar-nav {
+		display: inline-block;
+		float: none;
+		vertical-align: top;
+	}
+}
+
+
+
+/****** Style Star Rating Widget *****/
+
+.rating-wrapper { width:50%; }
+.rating-wrapper .rating-info { display: flex; margin: 0 0 2.0rem 0; }
+.rating-wrapper .rating-info p { display: inline-block; margin: 0 !important; padding: 1.0rem 0 0 0; width: 50%; font-size: 1.4rem; color: #D4D2D2; line-height: 2.0rem }
+.rating-wrapper:hover .rating-info p { color: #B4233C }
+.rating-wrapper .rating-info p:last-child { text-align: right; }
+
+
+.rating-wrapper > input { display: none; }
+.rating-wrapper > label:before {
+  display: inline-block;
+	margin: 5px;
+	width: 20%;
+	content: "";
+
+}
+
+.rating-wrapper > .half:before {
+  position: absolute;
+	display: inline-block;
+	width: 20%;
+	content: "";
+
+}
+
+.rating-wrapper > label {
+	display: inline-block;
+	cursor: pointer;
+	float: right;
+  	width: 20%;
+	height: 4.0rem;
+	background: transparent url(../images/rw-icon-rating-star.svg) center 0% / 4.0rem no-repeat;
+}
+
+.rating-wrapper:hover > label { background: transparent url(../images/rw-icon-rating-star.svg) center 33% / 4.0rem no-repeat; }
+
+/* CSS Magic to Highlight Stars on Hover */
+.rating-wrapper > input:checked ~ label, /* show gold star when clicked */
+.rating-wrapper .rating-box:not(:checked) > label:hover, /* hover current star */
+.rating-wrapper .rating-box:not(:checked) > label:hover ~ label { background: transparent url(../images/rw-icon-rating-star-filled.svg) center 66% / 4.0rem no-repeat; } /* hover previous stars in list */
+.rating-wrapper:hover > input:checked + label, /* hover current star when changing rating */
+.rating-wrapper:hover > input:checked ~ label,
+.rating-wrapper:hover > label ~ input:checked ~ label, /* lighten current selection */
+.rating-wrapper:hover > input:checked ~ label ~ label { background: transparent url(../images/rw-icon-rating-star-filled.svg) center 100% / 4.0rem no-repeat; }
+
+
+@media ( max-width : 767px) {
+	.btn-search {
+		display: none !important;
+	}
+	.rating-wrapper {
+		display: block !important;
+	}
+	.rating-wrapper header {
+		border: 0;
+		padding: 2.0rem 0 0 0;
+		width: 100%;
+	}
+	.rating-wrapper:hover header {
+		border: 0;
+		padding-bottom: 0 !important;
+		width: 100%;
+	}
+	.rating-wrapper header h1 {
+		font-size: 1.6rem !important;
+		line-height: 2.4rem !important;
+	}
+	.rating-wrapper {
+		width: 100%;
+	}
+	.rating-wrapper:hover {
+		
+	}
+	.rating-wrapper>label {
+		height: 3.5rem;
+		background-size: 3.5rem;
+	}
+	.rating-wrapper:hover>label {
+		background: transparent url(../images/rw-icon-rating-star.svg) center
+			33%/3.5rem no-repeat;
+	}
+
+	/* CSS Magic to Highlight Stars on Hover */
+	.rating-wrapper>input:checked ~ label, /* show gold star when clicked */
+		.rating-wrapper .rating-box:not (:checked ) >label:hover,
+		/* hover current star */ .rating-wrapper .rating-box:not (:checked ) >label:hover 
+		~ label {
+		background: transparent url(../images/rw-icon-rating-star-filled.svg)
+			center 66%/3.5rem no-repeat;
+	} /* hover previous stars in list */
+	.rating-wrapper:hover>input:checked+label,
+		/* hover current star when changing rating */ .rating-wrapper:hover>input:checked 
+		~ label, .rating-wrapper:hover>label ~ input:checked ~ label,
+		/* lighten current selection */ .rating-wrapper:hover>input:checked ~
+		label ~ label {
+		background: transparent url(../images/rw-icon-rating-star-filled.svg)
+			center 100%/3.5rem no-repeat;
+	}
+}
+
+/*autocomplete*/
+
+.ui-autocomplete  {
+	position: absolute;
+	width: 100%;
+	z-index: 1000;
+	cursor: default;
+	padding: 0;
+	list-style: none;
+	background-color: #ffffff;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.ui-autocomplete > li {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.ui-autocomplete > li:hover {
+  background-color: #00a7a8;
+}
+
+.ui-autocomplete > li.no-results {
+  cursor: default;
+}
+
+.ui-autocomplete > li.no-results:hover {
+	background-color: #ffffff;
+}
+
+.btn-search {
+	display: inline;
+	appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+    border: 0;
+    background: transparent;
+    color: white;
+}
+
+.btn-search:hover {
+	display: inline;
+	background-color: #00a7a8;
+    color: white;
+}
+
+
+
+.danger-red-green-colorblind {
+	color: black;
+	border-color:#cccccc;
+	background: #efefef;
+	background: repeating-linear-gradient(
+		  45deg,
+		  rgba(255, 255, 255, 0.5),
+		  rgba(255, 255, 255, 0.5) 10px,
+		  rgba(200, 200, 200, 0.15) 10px,
+		  rgba(200, 200, 200, 0.15) 20px
+		)
+}
+
+.warning-red-green-colorblind {
+	background-color:black;
+}
+
+
+.last-visited-items-container {
+	border-radius: 10px;
+	padding:10px 0px;
+	background-color: rgba(200, 200, 200, 0.15);
+	margin-bottom:50px;
+}
+
+.drug-min-profile p {
+	width:100%;
+	overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+}
+
+.drug-min-profile div.image-container {
+	height:130px;
+	width:100%;
+	overflow:hidden;
+	background-color: rgba(220, 220, 220, 0.15);
+}
+
+.drug-min-profile div.image-container:hover {
+	background-color: rgba(200, 200, 200, 0.15);
+}
+
+.drug-min-profile>div.image-container img {
+	height:100%;
+	overflow:hidden;
+}
+
+
+
+.font-size-list li {
+	height: 40px;
+}
+
+.font-size-list li span {
+	height: 40px;
+}

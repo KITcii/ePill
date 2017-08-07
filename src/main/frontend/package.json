@@ -1,0 +1,36 @@
+{
+  "name": "epill",
+  "version": "1.0.0",
+  "description": "epill",
+  "main": "index.js",
+  "license": "Apache-2.0",
+  "scripts": {
+    "start": "node ./node_modules/.bin/webpack -w"
+  },
+  "author": "Niclas Kannengiesser <n.kannengiesser@doccuty.com>",
+  "devDependencies": {
+    "babel-core": "6.24.1",
+    "babel-loader": "7.0.0-beta.1",
+    "babel-preset-es2015": "6.24.1",
+    "babel-preset-react": "6.24.1",
+    "bootstrap"	: "^3.3.6",
+    "webpack": "2.4.1",
+    "copy-webpack-plugin": "4.0.1"
+  },
+  "dependencies": {
+    "axios": "^0.16.2",
+    "babel-preset-stage-1": "6.24.1",
+    "i18next": "^8.4.2",
+    "i18next-xhr-backend": "^1.4.2",
+    "i18next-browser-languagedetector": "^2.0.0",
+    "moment": "2.14.1",
+    "react": "15.5.4",
+    "react-cookie": "^2.0.7",
+    "react-dom": "^15.5.4",
+    "react-i18next": "^4.1.2",
+    "react-router": "^4.1.1",
+    "react-router-dom": "^4.1.1",	
+    "react-toastify"	: "^1.7.0",
+    "universal-cookie": "^2.0.8"
+  }
+}
