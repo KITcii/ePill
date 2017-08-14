@@ -31,7 +31,7 @@ Tailoring:
 
 This Java project is based on Maven and Webpak and uses spring framework and react.
 There is a strict seperation between frontend and backend.
-Currently you can choose between two profiles:
+Currently you can choose between three profiles:
 Per default ePill is using H2 database for development mode which is very comfortable when developing
 locally. For configurations see:
 	/src/main/resources/application.properties
@@ -39,6 +39,10 @@ locally. For configurations see:
 When deployed to heroku as a running instance have a look at application-heroku.properties. When using
 heroku profile ePill uses postgres database. For configurations see:
 	/src/main/resources/application-heroku.properties
+
+
+To execute epill-1.9-SNAPSHOT.jar on epill.uni-kassel.de use "uni" profile:
+	java -jar epill.jar --spring.profiles.active='uni'
 
 Frontend was developed using react and Webpack. Webpack-dependencies can be added in:
 	/src/main/frontend/package.json

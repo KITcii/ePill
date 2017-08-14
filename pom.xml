@@ -17,8 +17,8 @@
 		<sdmlib.version>4.5.902-SNAPSHOT</sdmlib.version>
     </properties>
 
-    <groupId>com.doccuty.epill</groupId>
-    <artifactId>demo</artifactId>
+    <groupId>com.doccuty</groupId>
+    <artifactId>epill</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
@@ -48,6 +48,10 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
