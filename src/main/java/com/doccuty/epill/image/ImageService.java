@@ -23,6 +23,8 @@ public class ImageService {
 			image = repository.findOne(1L);
 		}
 		
+		LOG.info("Found image={}", image);
+		
 		return image;
 	}
 
