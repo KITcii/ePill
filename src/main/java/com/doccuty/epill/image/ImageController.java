@@ -45,9 +45,9 @@ public class ImageController {
 	    				mT = MediaType.IMAGE_JPEG;
 	    				break;
 	    		}
-	    		
-	    		
-	    		return ResponseEntity.ok().contentLength(img.length).contentType(mT).body(img);
+
+	    		if(img != null)
+	    			return ResponseEntity.ok().contentLength(img.length).contentType(mT).body(img);
 	    	}
 	    	
 	    	return new ResponseEntity<>(HttpStatus.NO_CONTENT);
