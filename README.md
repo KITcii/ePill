@@ -44,6 +44,11 @@ heroku profile ePill uses postgres database. For configurations see:
 To execute epill-1.9-SNAPSHOT.jar on epill.uni-kassel.de use "uni" profile:
 	java -jar epill.jar --spring.profiles.active='uni'
 
+
+To keep the application alive after closing SSH connection use:
+	nohup java -jar epill.jar --spring.profiles.active='uni' &
+
+
 Frontend was developed using react and Webpack. Webpack-dependencies can be added in:
 	/src/main/frontend/package.json
 	
