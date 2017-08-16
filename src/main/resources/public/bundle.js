@@ -29445,7 +29445,7 @@ var DrugList = function (_React$Component) {
 		value: function checkForInteractions() {
 			var _this8 = this;
 
-			_axios2.default.get('/drug/interactions').then(function (_ref9) {
+			_axios2.default.get("/drug/interactions/" + this.state.cmd).then(function (_ref9) {
 				var data = _ref9.data;
 
 				_this8.state.interactions = data.value;
