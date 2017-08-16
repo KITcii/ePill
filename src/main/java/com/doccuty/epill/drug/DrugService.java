@@ -1,5 +1,6 @@
 package com.doccuty.epill.drug;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -22,6 +23,10 @@ import com.doccuty.epill.user.UserService;
 public class DrugService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(DrugService.class);
+
+	private static final String PROPERTY_DRUG_TAKING = "taking";
+
+	private static final String PROPERTY_DRUG_REMEMBER = "remember";
 	
 	@Autowired
 	DrugRepository repository;
@@ -139,11 +144,19 @@ public class DrugService {
 	 * @return
 	 */
 	
-	public String checkUserDrugsInteractions() {
+	public String checkUserDrugsInteractions(String listname) {
 
 		StringBuilder interactionText = new StringBuilder();
 		
-		List<Drug> list = this.findUserDrugsTaking(userService.getCurrentUser());
+		List<Drug> list = null;
+		
+		if(listname.equals(DrugService.PROPERTY_DRUG_TAKING)) {
+			list = repository.findUserDrugsTaking(userService.getCurrentUser().getId());
+		} else if(listname.equals(DrugService.PROPERTY_DRUG_REMEMBER)) {
+			list = repository.findUserDrugsRemembered(userService.getCurrentUser().getId());
+		} else {
+			list = new ArrayList<Drug>();
+		}
 		
 		for(Drug drug : list) {
 			for(Interaction interaction : drug.getInteraction()) {
@@ -182,8 +195,8 @@ public class DrugService {
 
 		user = userService.getUserById(user.getId());
 		
-		List<Drug> drugs = repository.findUserDrugsTaking(user.getId());		
-		List<Drug> taking = repository.findUserDrugsRemembered(user.getId());
+		List<Drug> taking = repository.findUserDrugsTaking(user.getId());		
+		List<Drug> drugs = repository.findUserDrugsRemembered(user.getId());
 		
 		for(Drug drug : drugs) {
 			drug.setIsRemembered(true);

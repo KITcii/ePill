@@ -268,8 +268,8 @@ class DrugList extends React.Component {
 
     //============================
     
-    checkForInteractions() {
-        axios.get('/drug/interactions').then(({data}) => {
+    checkForInteractions() {	
+        axios.get(`/drug/interactions/${this.state.cmd}`).then(({data}) => {
 	    		this.state.interactions = data.value;
 	    		this.setState(this.state);
         });
