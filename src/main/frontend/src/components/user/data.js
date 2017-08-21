@@ -213,7 +213,9 @@ class UserData extends React.Component {
 	        	</div>
 	     	
 	        	{User.levelOfDetail > 1 &&
-			    <div className="text-box">
+			    <div className="alert alert-info">
+                    <span className="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                    <span className="sr-only">Info:</span>&nbsp;
 	        			{t("userCockpitDescr").replace("%User.firstname%", firstname).replace("%User.lastname%", lastname)}
 				</div>
 		    } 

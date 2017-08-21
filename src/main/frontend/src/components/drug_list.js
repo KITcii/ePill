@@ -422,15 +422,19 @@ class DrugList extends React.Component {
 		    		<div className='page-header'>
 		    			<h3>{title}</h3>
 				</div>
-				{User.isAuthenticated() && User.levelOfDetail > 1 &&
-		            <div className="text-box">
-						{description.replace("%User.firstname%", firstname).replace("%User.lastname%", lastname)}
-		            </div>
-				}
-					
+					{User.isAuthenticated() && User.levelOfDetail > 1 &&
+			            <div className="alert alert-info">
+							<span className="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+							<span className="sr-only">Info:</span>&nbsp;
+							{description.replace("%User.firstname%", firstname).replace("%User.lastname%", lastname)}
+			            </div>
+					}
+
 					{drugs.length > 1 && User.isAuthenticated() && interactions.length > 0 &&
 						<div className={"alert alert-dismissable" + (User.redGreenColorblind ? " danger-red-green-colorblind" : " alert-danger") }>
-							<a href="#" className="close" data-dismiss="alert" aria-label="close">&times;</a>
+					 		<button type="button" className="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<span className="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<span className="sr-only">Error:</span>
 							<h5>{User.redGreenColorblind} {t("interaction")}</h5>
 							<span dangerouslySetInnerHTML={this.createMarkup(interactions)} />
 		                </div>
