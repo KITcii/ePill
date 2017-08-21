@@ -29674,16 +29674,33 @@ var DrugList = function (_React$Component) {
 				),
 				_User2.default.isAuthenticated() && _User2.default.levelOfDetail > 1 && _react2.default.createElement(
 					"div",
-					{ className: "text-box" },
+					{ className: "alert alert-info" },
+					_react2.default.createElement("span", { className: "glyphicon glyphicon-info-sign", "aria-hidden": "true" }),
+					_react2.default.createElement(
+						"span",
+						{ className: "sr-only" },
+						"Info:"
+					),
+					"\xA0",
 					description.replace("%User.firstname%", firstname).replace("%User.lastname%", lastname)
 				),
 				drugs.length > 1 && _User2.default.isAuthenticated() && interactions.length > 0 && _react2.default.createElement(
 					"div",
 					{ className: "alert alert-dismissable" + (_User2.default.redGreenColorblind ? " danger-red-green-colorblind" : " alert-danger") },
 					_react2.default.createElement(
-						"a",
-						{ href: "#", className: "close", "data-dismiss": "alert", "aria-label": "close" },
-						"\xD7"
+						"button",
+						{ type: "button", className: "close", "data-dismiss": "alert", "aria-label": "Close" },
+						_react2.default.createElement(
+							"span",
+							{ "aria-hidden": "true" },
+							"\xD7"
+						)
+					),
+					_react2.default.createElement("span", { className: "glyphicon glyphicon-exclamation-sign", "aria-hidden": "true" }),
+					_react2.default.createElement(
+						"span",
+						{ className: "sr-only" },
+						"Error:"
 					),
 					_react2.default.createElement(
 						"h5",
@@ -31335,7 +31352,14 @@ var UserData = function (_React$Component) {
                 ),
                 _User2.default.levelOfDetail > 1 && _react2.default.createElement(
                     "div",
-                    { className: "text-box" },
+                    { className: "alert alert-info" },
+                    _react2.default.createElement("span", { className: "glyphicon glyphicon-info-sign", "aria-hidden": "true" }),
+                    _react2.default.createElement(
+                        "span",
+                        { className: "sr-only" },
+                        "Info:"
+                    ),
+                    "\xA0",
                     t("userCockpitDescr").replace("%User.firstname%", firstname).replace("%User.lastname%", lastname)
                 ),
                 _react2.default.createElement(
@@ -31755,15 +31779,6 @@ var UserMenue = function (_React$Component) {
 									_reactRouterDom.Link,
 									{ to: "/drug/remember" },
 									t('rememberedDrugs')
-								)
-							),
-							_react2.default.createElement(
-								"li",
-								null,
-								_react2.default.createElement(
-									_reactRouterDom.Link,
-									{ to: "/user/settings" },
-									t('userSettings')
 								)
 							),
 							_react2.default.createElement(
