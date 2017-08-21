@@ -29,7 +29,7 @@ Tailoring:
 
 # Technical Overview
 
-This Java project is based on Maven and Webpak and uses spring framework and react.
+This Java project is based on Maven and Webpack and uses spring framework and react.
 There is a strict seperation between frontend and backend.
 Currently you can choose between three profiles:
 Per default ePill is using H2 database for development mode which is very comfortable when developing
@@ -82,5 +82,5 @@ Ensure you have Java 8 (or higher), Maven, npm and postgres installed on your se
 Then just move the /target/demo-1.0-SNAPSHOT.jar file into your favorite
 direction. You can execute this file from console with following command:
 
-	java -jar demo-1.0-SNAPSHOT.jar
+	nohup java -jar demo-1.0-SNAPSHOT.jar --spring.profiles.active='uni' &
 	
