@@ -26,7 +26,6 @@ import java.util.HashSet;
 import com.doccuty.epill.drug.Drug;
 import com.doccuty.epill.model.ActiveSubstance;
 
-import java.awt.List;
 import java.util.Collection;
 import de.uniks.networkparser.list.NumberList;
 import de.uniks.networkparser.list.ObjectSet;

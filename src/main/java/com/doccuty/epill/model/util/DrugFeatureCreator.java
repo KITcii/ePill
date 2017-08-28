@@ -31,7 +31,7 @@ import de.uniks.networkparser.IdMap;
 public class DrugFeatureCreator implements SendableEntityCreatorNoIndex
 {
    private final String[] properties = new String[]
-   {
+   {		   
       DrugFeature.PROPERTY_ID,
       DrugFeature.PROPERTY_DRUGFEATURE
       //DrugFeature.PROPERTY_DRUG,

@@ -14,7 +14,6 @@ import com.doccuty.epill.drug.DrugService;
 import com.doccuty.epill.iteminvocation.ItemInvocation;
 import com.doccuty.epill.model.util.DrugCreator;
 import com.doccuty.epill.model.util.ProductGroupCreator;
-import com.doccuty.epill.packagingsection.PackagingSection;
 import com.doccuty.epill.user.UserService;
 
 import de.uniks.networkparser.Deep;
@@ -24,7 +23,6 @@ import de.uniks.networkparser.json.JsonObject;
 
 import javax.transaction.Transactional;
 
-import java.util.Iterator;
 import java.util.List;
 import static org.junit.Assert.*;
 

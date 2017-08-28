@@ -41,7 +41,9 @@ import java.beans.PropertyChangeListener;
 import de.uniks.networkparser.EntityUtil;
 
 import com.doccuty.epill.disease.Disease;
+import com.doccuty.epill.drug.Drug;
 import com.doccuty.epill.model.util.DiseaseSet;
+import com.doccuty.epill.model.util.DrugSet;
 import com.doccuty.epill.model.util.UserSet;
 import com.doccuty.epill.user.User;
    /**
@@ -324,5 +326,73 @@ import com.doccuty.epill.user.User;
       Disease value = new Disease();
       withDisease(value);
       return value;
+   }
+   
+
+   
+   /********************************************************************
+    * <pre>
+    *              many                       many
+    * Gender ----------------------------------- Disease
+    *              gender                   disease
+    * </pre>
+    */
+   
+   public static final String PROPERTY_DRUG = "drug";
+
+   @ManyToMany(cascade=CascadeType.ALL)  
+   @JoinTable(name="gender_drug", joinColumns=@JoinColumn(name="idgender"), inverseJoinColumns=@JoinColumn(name="iddrug"))
+   private Set<Drug> drug = null;
+   
+   public Set<Drug> getDrug()
+   {
+      if (this.drug == null)
+      {
+         return DrugSet.EMPTY_SET;
+      }
+   
+      return this.drug;
+   }
+
+   public Gender withDrug(Drug... value)
+   {
+      if(value==null){
+         return this;
+      }
+      for (Drug item : value)
+      {
+         if (item != null)
+         {
+            if (this.drug == null)
+            {
+               this.drug = new DrugSet();
+            }
+            
+            boolean changed = this.drug.add (item);
+
+            if (changed)
+            {
+               item.withGender(this);
+               firePropertyChange(PROPERTY_DRUG, null, item);
+            }
+         }
+      }
+      return this;
+   } 
+
+   public Gender withoutDrug(Drug... value)
+   {
+      for (Drug item : value)
+      {
+         if ((this.drug != null) && (item != null))
+         {
+            if (this.drug.remove(item))
+            {
+               item.withoutGender(this);
+               firePropertyChange(PROPERTY_DRUG, item, null);
+            }
+         }
+      }
+      return this;
    }
 }

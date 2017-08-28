@@ -11,21 +11,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.doccuty.epill.drug.DrugService;
-import com.doccuty.epill.iteminvocation.ItemInvocation;
-import com.doccuty.epill.model.util.DrugCreator;
-import com.doccuty.epill.model.util.ProductGroupCreator;
 import com.doccuty.epill.packagingsection.PackagingSection;
 import com.doccuty.epill.user.UserService;
 
-import de.uniks.networkparser.Deep;
-import de.uniks.networkparser.Filter;
-import de.uniks.networkparser.IdMap;
-import de.uniks.networkparser.json.JsonObject;
-
 import javax.transaction.Transactional;
 
-import java.util.Iterator;
-import java.util.List;
 import static org.junit.Assert.*;
 
 // Use Spring's testing support in JUnit

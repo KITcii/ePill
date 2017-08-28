@@ -14,9 +14,7 @@ import com.doccuty.epill.drug.DrugRepository;
 import com.doccuty.epill.gender.Gender;
 import com.doccuty.epill.gender.GenderRepository;
 import com.doccuty.epill.iteminvocation.ItemInvocation;
-import com.doccuty.epill.language.Language;
 import com.doccuty.epill.language.LanguageRepository;
-import com.doccuty.epill.model.Country;
 import com.doccuty.epill.model.DrugFeature;
 import com.doccuty.epill.model.PackagingTopic;
 
@@ -84,6 +82,8 @@ public class UserService {
 		}
 		
 		user = repository.save(user);
+		
+		LOG.info("User={} was saved ", user);
 		
 		return user;
 	}
@@ -156,6 +156,8 @@ public class UserService {
 			user.setGender(genderRepository.findOne(usr.getGender().getId()));
 		
 		user = repository.save(user);
+
+		LOG.info("User={} was updated ", user);
 		
 		return user;
 	}

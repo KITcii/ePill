@@ -2,7 +2,6 @@ package com.doccuty.epill.model;
 
 import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -71,12 +70,12 @@ public class LoginAttempt {
 	private long iduser;
 
 	public long getUserId() {
-		return this.id;
+		return this.iduser;
 	}
 
 	public void setUserId(long value) {
-		if (this.id != value) {
-			this.id = value;
+		if (this.iduser != value) {
+			this.iduser = value;
 		}
 	}
 	

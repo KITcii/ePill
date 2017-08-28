@@ -48,8 +48,9 @@ class UserData extends React.Component {
 
 
     componentWillMount() {
-    		if(!User.isAuthenticated())
+    		if(!User.isAuthenticated()) {
     			return;
+    		}
 
     		axios.get(`/user/${User.id}`)
             .then(({data, status}) => {

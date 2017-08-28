@@ -14,7 +14,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -330,9 +329,9 @@ public class DrugFeature implements SendableEntity {
 	   {
 	      for (User item : value)
 	      {
-	         if ((this.drug != null) && (item != null))
+	         if ((this.user != null) && (item != null))
 	         {
-	            if (this.drug.remove(item))
+	            if (this.user.remove(item))
 	            {
 	               item.withoutPreferredDrugFeature(this);
 	               firePropertyChange(PROPERTY_USER, item, null);

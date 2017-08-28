@@ -41,7 +41,7 @@
 	"greetingEvening": "Good evening, %User.firstname%!",
 	"greetingNight": "Oh, you are still awake, %User.firstname%!",
 	"drugsTaking": "Your current medication",
-	"drugTakingListAllDescriptionText": "%User.firstname%, this is an overview about all drugs you are frequently taking. You can add new drugs to or remove drugs from this list.",
+	"drugTakingListDescriptionText": "%User.firstname%, this is an overview about all drugs you are frequently taking. You can add new drugs to or remove drugs from this list.",
 	"drugsRemember": "Remembered Drugs",
 	"drugRememberListDescriptionText": "%User.firstname%, this is an overview about all drugs you added to your remember list. Du kannst neue Medikamente hinzufügen und gelistete aus der Liste entfernen.",
 	"emptyList": "This list is still empty...",
