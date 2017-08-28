@@ -1,9 +1,5 @@
 package com.doccuty.epill.disease;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,15 +9,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.doccuty.epill.drug.Drug;
 import com.doccuty.epill.model.util.DiseaseCreator;
 import com.doccuty.epill.model.util.DiseaseSet;
-import com.doccuty.epill.model.util.DrugCreator;
 import com.doccuty.epill.user.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-
 import de.uniks.networkparser.Deep;
 import de.uniks.networkparser.Filter;
 import de.uniks.networkparser.IdMap;

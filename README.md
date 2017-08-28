@@ -61,6 +61,9 @@ The frontend is built into spring public folder:
 	/src/main/resources/public/***
 	
 	
+For serialization of bidirectional connections SDMLib is used. For further information
+have a look at:
+	com.doccuty.epill.model.util.*
 
 # Initial Data
 The initial data is inserted by executing sql from /src/main/resources/*.sql for
@@ -73,9 +76,29 @@ For Unit testing use
 
 # Executing in development mode
 First ensure you have H2, Java 8 (or higher) and Maven installed
-Open the fratcher project in you IDE (e. g. Eclipse)
-Execute the project by starting FratcherMain.java
+Open the fratcher project in you IDE (e. g. Eclipse).
 
+To build this maven project following requirements must be fulfilled:
+- H2 database
+- Java 8 or later
+- NPM
+- Maven
+
+***********************************************************************************
+Before running this project in your favorite IDE please run	
+	mvn clean install																	 
+in console in the project directory in order to download all necessary packages.
+**********************************************************************************
+
+
+Database Settings can be changed for the respective profile in
+	/src/main/resources/application-yourprofile.properties
+	
+When creating new profiles do not forget to add its name to
+	/Procfile
+
+
+Execute the project by starting FratcherMain.java
 
 # Execute on Server
 Ensure you have Java 8 (or higher), Maven, npm and postgres installed on your server.

@@ -5,8 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.test.context.ActiveProfiles;
-
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
@@ -23,6 +21,7 @@ public class EpillMain {
 
     public static void main(String[] args) {
         SpringApplication.run(EpillMain.class, args);
+        LOG.info("Started ePill");
     }
 
 

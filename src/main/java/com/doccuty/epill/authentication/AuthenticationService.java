@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 import com.doccuty.epill.model.LoginAttempt;
 import com.doccuty.epill.user.SimpleUser;
 import com.doccuty.epill.user.SimpleUserRepository;
-import com.doccuty.epill.user.User;
-import com.doccuty.epill.user.UserRepository;
 import com.doccuty.epill.user.UserToken;
 
 @Service

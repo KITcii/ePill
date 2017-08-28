@@ -3,8 +3,6 @@ package com.doccuty.epill.authentication;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.SignatureException;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.filter.GenericFilterBean;
 
 import com.doccuty.epill.user.UserService;
@@ -18,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class JWTFilter extends GenericFilterBean {
-    private static final Logger LOG = LoggerFactory.getLogger(JWTFilter.class);
 
     private AuthenticationService authenticationService;
     private UserService userService;

@@ -78,6 +78,8 @@ public class PackagingSectionService {
 		
 		if(tailoredSection == null)
 			return section;
+
+		LOG.info("Loaded tailored packaging section={}", tailoredSection);
 		
 		return tailoredSection;
 	}

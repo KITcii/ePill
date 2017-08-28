@@ -729,6 +729,60 @@ public class Drug extends SimpleDrug {
 
 	/********************************************************************
 	 * <pre>
+	 *              many                       many
+	 * Drug ----------------------------------- Gender
+	 *              drug                   gender
+	 * </pre>
+	 */
+
+	public static final String PROPERTY_GENDER = "gender";
+
+	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "drug")
+	private List<Gender> gender = null;
+
+	public List<Gender> getGender() {
+		if (this.gender == null) {
+			return new ArrayList<Gender>();
+		}
+		
+		return this.gender;
+	}
+
+	public Drug withGender(Gender... value) {
+		if (value == null) {
+			return this;
+		}
+		for (Gender item : value) {
+			if (item != null) {
+				if (this.gender == null) {
+					this.gender = new ArrayList<Gender>();
+				}
+
+				boolean changed = this.gender.add(item);
+
+				if (changed) {
+					item.withDrug(this);
+					firePropertyChange(PROPERTY_GENDER, null, item);
+				}
+			}
+		}
+		return this;
+	}
+
+	public Drug withoutGender(Gender... value) {
+		for (Gender item : value) {
+			if ((this.gender != null) && (item != null)) {
+				if (this.gender.remove(item)) {
+					item.withoutDrug(this);
+					firePropertyChange(PROPERTY_GENDER, item, null);
+				}
+			}
+		}
+		return this;
+	}
+
+	/********************************************************************
+	 * <pre>
 	 *              one                       many
 	 * Drug	 ----------------------------------- User
 	 *              takingDrug                   user

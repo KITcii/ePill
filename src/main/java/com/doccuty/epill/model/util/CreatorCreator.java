@@ -29,7 +29,6 @@ class CreatorCreator{
       jsonIdMap.with(new UserCreator());
       jsonIdMap.with(new DiseaseCreator());
       jsonIdMap.with(new DrugFeatureCreator());
-      jsonIdMap.with(new QuestionCreator());
       jsonIdMap.with(new ImageCreator());
       return jsonIdMap;
    }
