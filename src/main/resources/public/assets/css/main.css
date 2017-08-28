@@ -450,6 +450,16 @@ a.wide { display : block }
 	margin-top: 40px;
 	padding-top: 20px;
 	border-top: 10px solid #332e20;
+	background-color:#dddddd;
+}
+
+.footer div {
+	background-color:#dddddd;
+}
+
+.footer .logo {
+	height:50px;
+	width:auto;
 }
 
 .footer .list-inline li:not(:first-child):not(:last-child) {
