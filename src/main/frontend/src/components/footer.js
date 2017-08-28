@@ -1,5 +1,6 @@
 import React from "react";
 
+import {Link} from "react-router-dom";
 import {translate} from "react-i18next";
 
 import User from "./../util/User";
@@ -30,16 +31,9 @@ class Footer extends React.Component {
 					<div className="container">
 						<div className="row bottom-rule">
 							<div className="col-sm-4 footer-section">
-								<strong>Connect with us</strong>
-								<p>Email</p>
-								<form className="form-inline">
-									<div className="form-group">
-										<label className="sr-only" htmlFor="inputEmail">{t("email")}</label> <input
-											type="email" className="form-control" id="inputEmail"
-											placeholder="address@example.com" />
-									</div>
-									<button type="submit" className="btn btn-default">{t('subscribe')}</button>
-								</form>
+								<Link to="/">
+								 	<img src="/assets/images/logo_v.svg" className="logo" title="fratcher" alt="fratcher"></img>
+								</Link>
 							</div>
 							<div className="col-sm-5 footer-section">
 								<ul className="list-inline">

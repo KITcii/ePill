@@ -30910,6 +30910,8 @@ var _react = __webpack_require__(2);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRouterDom = __webpack_require__(14);
+
 var _reactI18next = __webpack_require__(9);
 
 var _User = __webpack_require__(12);
@@ -30966,36 +30968,9 @@ var Footer = function (_React$Component) {
 							"div",
 							{ className: "col-sm-4 footer-section" },
 							_react2.default.createElement(
-								"strong",
-								null,
-								"Connect with us"
-							),
-							_react2.default.createElement(
-								"p",
-								null,
-								"Email"
-							),
-							_react2.default.createElement(
-								"form",
-								{ className: "form-inline" },
-								_react2.default.createElement(
-									"div",
-									{ className: "form-group" },
-									_react2.default.createElement(
-										"label",
-										{ className: "sr-only", htmlFor: "inputEmail" },
-										t("email")
-									),
-									" ",
-									_react2.default.createElement("input", {
-										type: "email", className: "form-control", id: "inputEmail",
-										placeholder: "address@example.com" })
-								),
-								_react2.default.createElement(
-									"button",
-									{ type: "submit", className: "btn btn-default" },
-									t('subscribe')
-								)
+								_reactRouterDom.Link,
+								{ to: "/" },
+								_react2.default.createElement("img", { src: "/assets/images/logo_v.svg", className: "logo", title: "fratcher", alt: "fratcher" })
 							)
 						),
 						_react2.default.createElement(

@@ -44,7 +44,6 @@ DELETE FROM image;
 DELETE FROM gender;
 DELETE FROM language;
 DELETE FROM country;
-DELETE FROM question;
 DELETE FROM product_group;
 
 
@@ -178,12 +177,6 @@ INSERT INTO active_substance (id, name, idsubstance_group) VALUES (10,'Quinapril
 
 
 --
--- Dumping data for table `question`
---
-
-INSERT INTO question (id, address, question) VALUES (1,'Hallo %firstname% %lastname%','setzt du dich intentsiv mit deiner Gesundheit auseinander?');
-
---
 -- Dumping data for table `substance_group`
 --
 
@@ -245,11 +238,6 @@ INSERT INTO packaging (id, name, pzn, iddrug) VALUES (16,'100 ml Lösung','01416
 INSERT INTO packaging (id, name, pzn, iddrug) VALUES (17,'N3','03738798',10);
 INSERT INTO packaging (id, name, pzn, iddrug) VALUES (18,'N1','03738775',10);
 
-
-
---
--- Dumping data for table `answer`
---
 
 
 --
