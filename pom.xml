@@ -86,8 +86,16 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.4</version>
         </dependency>
-        
-        
+
+
+        <!--Necessary for Java >= 10 support-->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+
+
         <!-- SDMLib -->
         <dependency>
 			<groupId>de.uniks</groupId>

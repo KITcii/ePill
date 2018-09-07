@@ -105,5 +105,4 @@ Ensure you have Java 8 (or higher), Maven, npm and postgres installed on your se
 Then just move the /target/demo-1.0-SNAPSHOT.jar file into your favorite
 direction. You can execute this file from console with following command:
 
-	nohup java -jar demo-1.0-SNAPSHOT.jar --spring.profiles.active='uni' &
-	
+	nohup java -jar -Dspring.profiles.active=uni  epill-1.1-SNAPSHOT.jar &
