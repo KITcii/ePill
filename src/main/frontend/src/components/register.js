@@ -5,6 +5,9 @@ import {Link} from "react-router-dom";
 import {translate} from "react-i18next";
 import { toast } from 'react-toastify';
 
+import GoogleLogin from 'react-google-login';
+import User from "../util/User";
+
 // See https://facebook.github.io/react/docs/forms.html for documentation about forms.
 class Register extends React.Component {
     constructor(props) {
@@ -30,7 +33,13 @@ class Register extends React.Component {
         this.handlePasswordRepeatChange = this.handlePasswordRepeatChange.bind(this);
         
         this.handleSubmit = this.handleSubmit.bind(this);
-    }
+
+        this.registeredByGoogle = this.registeredByGoogle.bind(this);
+        this.autoLogIn = this.autoLogIn.bind(this);
+
+        this.options = toast.POSITION.BOTTOM_CENTER;
+
+	}
 
 
     handleFirstnameChange(event) {
@@ -69,57 +78,132 @@ class Register extends React.Component {
 		this.setState(this.state);
     }
 
-    handleSubmit(event) {
-        event.preventDefault();
-        
-        const {t} = this.props;
-        const options = {
-        	    position: toast.POSITION.BOTTOM_CENTER
-        };
-        
-        if(this.state.firstname.length == 0 || this.state.lastname.length == 0 || this.state.username.length == 0 || this.state.password == 0) {
-        		return;
-        }
-        
-        if(this.state.password != this.state.passwordRepeat) {
-        		toast.error(t('passwordsDifferent'), options);
-	        	return;
-        }
-        this.state.sending = true;
-        this.setState(this.state);
-        
-        axios.post('/user/save',
-            {
-                firstname       : this.state.firstname,
-                lastname        : this.state.lastname,
-                gender          : this.state.gender,
-                redGreenColorblind    : this.state.redGreenColorblind,
-                username        : this.state.username,
-                password        : this.state.password
-            })
-            .then(({data, status}) => {
+	handleSubmit(event) {
+		event.preventDefault();
 
-	            this.state.sending = false;
-	            this.setState(this.state);
+		const {t} = this.props;
+		const options = {
+			position: toast.POSITION.BOTTOM_CENTER
+		};
 
-	            	switch (status) {
-	                case 200:
-            				toast.success(t('registrationSuccess'), options);
-		    	            	this.props.history.push("/user/login");
-		    	            	break;
-	                case 409:
-                			toast.error(t('usernameUsed'), options);
-	                    	break;
-	                default:
-	                    toast.error(t('errorOccured'), options);
-                        break;
-	            } 	
-            	});
-    }
+		if(this.state.firstname.length == 0 || this.state.lastname.length == 0 || this.state.username.length == 0 || this.state.password == 0) {
+			return;
+		}
+
+		if(this.state.password != this.state.passwordRepeat) {
+			toast.error(t('passwordsDifferent'), this.options);
+			return;
+		}
+		this.state.sending = true;
+		this.setState(this.state);
+
+		axios.post('/user/save',
+			{
+				firstname       : this.state.firstname,
+				lastname        : this.state.lastname,
+				gender          : this.state.gender,
+				redGreenColorblind    : this.state.redGreenColorblind,
+				username        : this.state.username,
+				password        : this.state.password
+			})
+			.then(({data, status}) => {
+
+				this.state.sending = false;
+				this.setState(this.state);
+
+				switch (status) {
+					case 200:
+						toast.success(t('registrationSuccess'), this.options);
+						this.props.history.push("/user/login");
+						break;
+					case 409:
+						toast.error(t('usernameUsed'), this.options);
+						break;
+					default:
+						toast.error(t('errorOccurred'), this.options);
+						break;
+				}
+			});
+	}
+
+	/*
+	To prevent overfilling the render method, I extracted the pushing and sending process for Google sign up to a separate method
+	 */
+	registeredByGoogle(googleUser) {
+		const {t} = this.props;
+
+		this.state.sending = true;
+		this.setState(this.state);
+		console.log("sending");
+		//TODO: Perhaps the user already registered for our userbase, we have to log him in directly in that case...
+		//TODO: After he registered with google, anyone could enter his acc, since it has no pw...
+		axios.post('/user/save',
+			{
+				firstname       : this.state.firstname,
+				lastname        : this.state.lastname,
+				gender          : this.state.gender,
+				redGreenColorblind    : this.state.redGreenColorblind,
+				username        : this.state.username,
+				password        : this.state.password
+			})
+			.then(({data, status}) => {
+
+				this.state.sending = false;
+				this.setState(this.state);
+
+				//TODO: Verschieben der Fehlerbehebung in "responseGoogle"
+				//TODO: Right now, we just send the user to the homepage. We have to auto-log-in him
+
+				//Is it correct to use the data above like that? (security wise)
+				switch (status) {
+					case 200:
+						toast.success(t('registrationSuccess'), this.options);
+						//now we have to log him in.
+						this.autoLogIn(googleUser);
+						// Redirect to front page.
+						this.props.history.push("/");
+						console.log("success!");
+						break;
+					case 409:
+						toast.error(t('usernameUsed'), this.options);
+						break;
+					default:
+						toast.error(t('errorOccured'), this.options);
+						break;
+				}
+			});
+	}
+
+	autoLogIn(googleUser) {
+		const id_token = googleUser.getAuthResponse().id_token;
+
+		axios.post('/auth/login', this.state, {
+			// We allow a status code of 401 (unauthorized). Otherwise it is interpreted as an error and we can't
+			// check the HTTP status code.
+			validateStatus: (status) => {
+				console.log(status);
+				return (status >= 200 && status < 300) || status == 401
+			}
+		})
+	}
 
 
     render() {
         const {t} = this.props;
+
+        const responseGoogle = (response) => {
+			console.log(response);
+			//TODO Check if something went wrong.
+			const profile = response.getBasicProfile();
+			const id_token = response.getAuthResponse().id_token;
+
+			this.state.firstname = profile.getGivenName();
+			this.state.lastname = profile.getFamilyName();
+			//TODO For now I will assume the user wants his email to be the username.
+			this.state.username = profile.getEmail();
+			console.log("Now registerProcess should be running.");
+			this.registeredByGoogle(response);
+		}
         
         return (
         		<div className="container no-banner">
@@ -195,6 +279,15 @@ class Register extends React.Component {
 		                			dein Verständnis für Medikamente zu verbessern.</p>
 		                			<p>Beispielsweise können wir dir genau die Informationen...</p>
 		                </div>
+
+						<GoogleLogin
+							clientId="583900150012-agjlvgr8gjsj8cv5f8fkiv3fjl9keu1j.apps.googleusercontent.com"
+							buttonText="Sign Up with Google"
+							onSuccess={responseGoogle}
+							onFailure={responseGoogle}
+							cookiePolicy={'single_host_origin'}
+						/>
+
 		           </div>
 		       </div>
 		              
