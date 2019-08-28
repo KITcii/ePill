@@ -123,7 +123,7 @@ INSERT INTO image (id, filename, filetype, uploaded_at, image) VALUES (7,'Clexan
 INSERT INTO image (id, filename, filetype, uploaded_at, image) VALUES (8,'Novalgin','image/jpg', NOW(), FILE_READ('src/main/frontend/assets/images/novalgin.jpg'));
 INSERT INTO image (id, filename, filetype, uploaded_at, image) VALUES (9,'Reminyl','image/jpg', NOW(), FILE_READ('src/main/frontend/assets/images/reminyl.jpg'));
 INSERT INTO image (id, filename, filetype, uploaded_at, image) VALUES (10,'Toujeo','image/jpg', NOW(), FILE_READ('src/main/frontend/assets/images/toujeo.jpg'));
-
+INSERT INTO image (id, filename, filetype, uploaded_at, image) VALUES (11,'Aspirin','image/jpg', NOW(), FILE_READ('src/main/frontend/assets/images/toujeo.jpg'));
 
 --
 -- Dumping data for table `drug_simple`
@@ -139,6 +139,7 @@ INSERT INTO drug_simple (id, name, number, status, version, year, idimage) VALUE
 INSERT INTO drug_simple (id, name, number, status, version, year, idimage) VALUES (8,'REMINYL® 4 mg/ml Lösung zum Einnehmen',0,'3915-06-01','1.36','2011-1-1', 9);
 INSERT INTO drug_simple (id, name, number, status, version, year, idimage) VALUES (9,'Topiramat-Janssen',0,'3915-06-01','1.0','2011-1-1', 1);
 INSERT INTO drug_simple (id, name, number, status, version, year, idimage) VALUES (10,'Toujeo',0,'3915-06-01','1.59','2011-1-1', 10);
+INSERT INTO drug_simple (id, name, number, status, version, year, idimage) VALUES (11,'Aspirin',0,'3915-06-01','1.59','2019-1-1', 11);
 
 
 --
@@ -155,7 +156,7 @@ INSERT INTO drug (id, idindication_group, idproduct_group) VALUES (7,6,2);
 INSERT INTO drug (id, idindication_group, idproduct_group) VALUES (8,2,2);
 INSERT INTO drug (id, idindication_group, idproduct_group) VALUES (9,3,1);
 INSERT INTO drug (id, idindication_group, idproduct_group) VALUES (10,5,1);
-
+INSERT INTO drug (id, idindication_group, idproduct_group) VALUES (11,5,1);
 
 --
 -- Dumping data for table `active_substance`
@@ -171,7 +172,7 @@ INSERT INTO active_substance (id, name, idsubstance_group) VALUES (7,'Enoxaparin
 INSERT INTO active_substance (id, name, idsubstance_group) VALUES (8,'Metamizol-Natrium 1 H2O',NULL);
 INSERT INTO active_substance (id, name, idsubstance_group) VALUES (9,'Galantamin',NULL);
 INSERT INTO active_substance (id, name, idsubstance_group) VALUES (10,'Quinaprilhydrochlorid',NULL);
-
+INSERT INTO active_substance (id, name, idsubstance_group) VALUES (11,'Acetylsalicylic acid',NULL);
 
 --
 -- Dumping data for table `product_group`
@@ -249,7 +250,7 @@ INSERT INTO disease (id, name) VALUES(2, 'Grippe');
 INSERT INTO disease (id, name) VALUES(3, 'Gelenkschmerzen');
 INSERT INTO disease (id, name) VALUES(4, 'Lungenentzündung');
 INSERT INTO disease (id, name) VALUES(5, 'Blasenentzündung');
-
+INSERT INTO disease (id, name) VALUES(6, 'Kopfschmerzen');
 
 --
 -- Dumping data for table `gender_disease`

@@ -31,7 +31,7 @@ class MedicationPlan extends React.Component {
         	            <div className='btn-group'></div>
                         </div>
                     <h3>{t('medicationPlan')}</h3>
-                    <h5>{t('for' + ' ' + date)}</h5>
+                    <h5>{t('for') + ' ' + date} </h5>
                 </div>
         	    
         		<div className="col-md-12 no-padding" dangerouslySetInnerHTML={this.createMarkup(t('medicationEmpty'))} />
