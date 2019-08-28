@@ -21,6 +21,7 @@ class UserData extends React.Component {
 	        	dateOfBirth	: '',
 	        	gender		: {id : 0},
 	        	email		: '',
+				weight 		: 0,
 	        	redGreenColorblind    : false,
             levelOfDetail       : 3,
             preferredFontSize   : 'defaultFontSize',
@@ -33,7 +34,7 @@ class UserData extends React.Component {
         
         this.handleGenderChange			= this.handleGenderChange.bind(this);
         this.handleRedGreenColorblind    = this.handleRedGreenColorblind.bind(this);
-
+		this.handleWeightChange		= this.handleWeightChange.bind(this);
         
         this.handleEmailChange			= this.handleEmailChange.bind(this);
 
@@ -41,7 +42,6 @@ class UserData extends React.Component {
         this.handleChangePreferredFontSize	= this.handleChangePreferredFontSize.bind(this);
         
         this.handleSubmit				= this.handleSubmit.bind(this);
-        
 
         this.cookies = this.props.cookies;
     }
@@ -62,7 +62,7 @@ class UserData extends React.Component {
             		this.state.gender		= data.gender			|| {id : 0};
             		this.state.username		= data.username;
             		this.state.redGreenColorblind    = data.redGreenColorblind || false;
-            		
+					this.state.weight		= data.weight;
             		this.state.levelOfDetail	    = data.levelOfDetail	|| 3;
             		this.state.preferredFontSize	= data.preferredFontSize   || 'defaultFontSize';
 
@@ -102,7 +102,12 @@ class UserData extends React.Component {
         
         User.setRedGreenColorblind(this.state.redGreenColorblind);
     }
-    
+
+	handleWeightChange(event) {
+		this.state.weight	= event.target.value;
+		this.setState(this.state);
+	}
+
     handleChangeLevelOfDetail(event) {
 	    this.state.levelOfDetail = event.target.value;
 	    	this.setState(this.state);
@@ -164,7 +169,8 @@ class UserData extends React.Component {
 	        			email				: this.state.email,
 	        			redGreenColorblind   : this.state.redGreenColorblind,
     	        			levelOfDetail		: this.state.levelOfDetail,
-	    	        		preferredFontSize	: this.state.preferredFontSize
+	    	        		preferredFontSize	: this.state.preferredFontSize,
+				   		weight : this.state.weight
                 })
                 .then(({data, status}) => {
                      this.state.sending = false;
@@ -243,13 +249,19 @@ class UserData extends React.Component {
                              <input type="text" name="dateOfBirth" id="dateOfBirth" className="form-control" value={this.state.dateOfBirth} onChange={this.handleDateOfBirthChange} />
                           </div> 
 					</fieldset>
-						
-		        		<fieldset>
-					      <div className="form-group col-lg-6 col-md-6">
-					         <label htmlFor="email">{t('email')}</label>
-					         <input type="text" name="email" id="email" className="form-control" value={this.state.email} onChange={this.handleEmailChange} />
-					      </div> 
+
+				   <fieldset>
+					  <div className="form-group col-lg-6 col-md-6">
+						 <label htmlFor="email">{t('email')}</label>
+						 <input type="text" name="email" id="email" className="form-control" value={this.state.email} onChange={this.handleEmailChange} />
+					  </div>
 					</fieldset>
+				    <fieldset>
+					   <div className="form-group col-lg-6 col-md-6">
+						   <label htmlFor="weight">{t('weight')}</label>
+						   <input type="text" name="weight" id="weight" className="form-control" value={this.state.weight} onChange={this.handleWeightChange} />
+					   </div>
+				    </fieldset>
 					<fieldset>
                           <div className="form-group col-lg-6 col-md-6">
                             <p><b>{t("redGreenColorblind")}</b></p>

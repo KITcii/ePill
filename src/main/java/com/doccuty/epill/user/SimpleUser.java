@@ -64,7 +64,7 @@ public class SimpleUser implements SendableEntity {
 	}
 
 	public SimpleUser(long id, String firstname, String lastname, String username, String password, String salt,
-			String preferredFontSize, int levelOfDetail, boolean redGreenColorblind) {
+			String preferredFontSize, int levelOfDetail, boolean redGreenColorblind, int weight) {
 		this.id = id;
 		this.firstname = firstname;
 		this.lastname = lastname;
@@ -74,6 +74,7 @@ public class SimpleUser implements SendableEntity {
 		this.preferredFontSize = preferredFontSize;
 		this.levelOfDetail = levelOfDetail;
 		this.redGreenColorblind = redGreenColorblind;
+		this.weight = weight;
 	}
 
 	public SimpleUser(User user) {
@@ -93,6 +94,7 @@ public class SimpleUser implements SendableEntity {
 
 		this.preferredFontSize = user.getPreferredFontSize();
 		this.levelOfDetail = user.getLevelOfDetail();
+		this.weight = user.getWeight();
 	}
 
 	// ==========================================================================
@@ -172,6 +174,7 @@ public class SimpleUser implements SendableEntity {
 		result.append(" ").append(this.getPassword());
 		result.append(" ").append(this.getEmail());
 		result.append(" ").append(this.getPreferredFontSize());
+		result.append(" ").append(this.getWeight());
 		return result.substring(1);
 	}
 
@@ -436,4 +439,29 @@ public class SimpleUser implements SendableEntity {
 		setRedGreenColorblind(value);
 		return this;
 	}
+
+	// ==========================================================================
+
+	public static final String PROPERTY_WEIGHT = "weight";
+
+	@Column(nullable=false, columnDefinition = "int default 0")
+	private int weight;
+
+	public int getWeight() {
+		return this.weight;
+	}
+
+	public void setWeight(int value) {
+		if (this.weight != value) {
+			int oldValue = this.weight;
+			this.weight = value;
+			this.firePropertyChange(PROPERTY_WEIGHT, oldValue, value);
+		}
+	}
+
+	public SimpleUser withWeight(int value) {
+		setWeight(value);
+		return this;
+	}
+
 }

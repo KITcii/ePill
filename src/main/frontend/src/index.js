@@ -22,7 +22,7 @@ import Register from "./components/register";
 import DrugList from "./components/drug_list";
 import DrugDetail from "./components/drug_detail";
 import UserData from "./components/user/data";
-
+import MedicationPlan from "./components/medication_plan";
 
 class Root extends React.Component {
 	constructor(props) {
@@ -74,6 +74,7 @@ class Root extends React.Component {
 	                <Route path="/user/rememberedDrugs" component={DrugList}/>
 	                <Route path="/user/takenDrugs" component={DrugList}/>
 	                <Route path="/user/data"  render={(props) => (<UserData {...props} updateFontSize={this.updateFontSize} updateNavigation={this.updateNavigation} /> )}/>
+                    <Route path="/medicationplan" component={MedicationPlan}/>
 	                
 	                {/* Information sites */}
 	                <Route path="/about" component={About} />

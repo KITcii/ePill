@@ -17,12 +17,14 @@ class Register extends React.Component {
         		redGreenColorblind    : false,
         		password		: '',
         		passwordRepeat: '',
-            	sending		: false
+            	sending		: false,
+				weight      : 0
         };
 
         this.handleFirstnameChange	= this.handleFirstnameChange.bind(this);
         this.handleLastnameChange	= this.handleLastnameChange.bind(this);
         this.handleGenderChange		= this.handleGenderChange.bind(this);
+		this.handleWeightChange     = this.handleWeightChange.bind(this);
         this.handleRedGreenColorblind = this.handleRedGreenColorblind.bind(this);
 
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -47,8 +49,13 @@ class Register extends React.Component {
     		this.state.gender.id = event.target.value;
     		this.setState(this.state);
     }
-    
-    handleRedGreenColorblind(event) {
+
+	handleWeightChange(event) {
+		this.state.weight = event.target.value;
+		this.setState(this.state);
+	}
+
+	handleRedGreenColorblind(event) {
         this.state.redGreenColorblind = (event.target.value == 1) ? true : false;
         this.setState(this.state);
     }
@@ -95,7 +102,8 @@ class Register extends React.Component {
                 gender          : this.state.gender,
                 redGreenColorblind    : this.state.redGreenColorblind,
                 username        : this.state.username,
-                password        : this.state.password
+                password        : this.state.password,
+				weight          : this.state.weight
             })
             .then(({data, status}) => {
 
@@ -146,6 +154,10 @@ class Register extends React.Component {
 			                         <option value="1">{t('male')}</option>
 			                    </select>
 			               </div>
+							<div className="form-group">
+								<label htmlFor="weight">{t('weight')}</label>
+								<input type="text" name="weight" id="weight" className="form-control" value={this.state.weight} onChange={this.handleWeightChange} />
+							</div>
 			               <div className="form-group">  
                                 <label htmlFor="red-green-colorblind">{t('redGreenColorblind')}</label>
                                 <ul id="red-green-colorblind" className="inline">

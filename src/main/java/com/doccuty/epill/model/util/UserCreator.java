@@ -57,7 +57,9 @@ public class UserCreator implements SendableEntityCreatorNoIndex
       //User.PROPERTY_CLICKS,
       //User.PROPERTY_QUERY,
       User.PROPERTY_DISEASE,
-      User.PROPERTY_REDGREENCOLORBLIND
+      User.PROPERTY_REDGREENCOLORBLIND,
+           User.PROPERTY_WEIGHT
+
    };
    
    @Override
@@ -182,6 +184,11 @@ public class UserCreator implements SendableEntityCreatorNoIndex
       {
          return ((User) target).getDisease();
       }
+
+      if (User.PROPERTY_WEIGHT.equalsIgnoreCase(attribute))
+      {
+         return ((User) target).getWeight();
+      }
       
       return null;
    }
@@ -246,6 +253,12 @@ public class UserCreator implements SendableEntityCreatorNoIndex
       if (User.PROPERTY_FIRSTNAME.equalsIgnoreCase(attrName))
       {
          ((User) target).setFirstname((String) value);
+         return true;
+      }
+
+      if (User.PROPERTY_WEIGHT.equalsIgnoreCase(attrName))
+      {
+         ((User) target).setWeight((int) value);
          return true;
       }
       
