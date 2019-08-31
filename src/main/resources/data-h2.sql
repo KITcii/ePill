@@ -610,3 +610,7 @@ INSERT INTO tailored_text (id, idgender, iddrug, min_age, max_age, is_minimum, t
 
 INSERT INTO tailored_text (id, idgender, iddrug, min_age, max_age, is_minimum, text) VALUES (59, 1, 1, 18, 25, true, 'Jeden zweiten Tag eine Tablette lutschen.');
 INSERT INTO tailored_text (id, idgender, iddrug, min_age, max_age, is_minimum, text) VALUES (60, 2, 2, 21, 40, true, 'Jeden dritten Tag eine Tablette kauen und nicht in Chlorwasser schwimmen.');
+
+-- user_drug_plan
+INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(1, 1, 1, '2019-08-21 09:00:00');
+INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(2, 2, 1, '2019-08-21 13:00:00');

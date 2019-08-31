@@ -2,6 +2,8 @@ package com.doccuty.epill.drug;
 
 import java.util.List;
 
+import com.doccuty.epill.model.util.UserDrugPlanCreator;
+import com.doccuty.epill.userdrugplan.UserDrugPlan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -394,5 +396,40 @@ public class DrugController {
 	    	}
 	    	
 	    	return new ResponseEntity<>(json, HttpStatus.OK);
-    } 
+    }
+
+	/**
+	 * get all planned drugs for user
+	 *
+	 * @return
+	 */
+	@RequestMapping(value={"/list/userdrugplanned"}, method = RequestMethod.GET)
+	public  ResponseEntity<JsonObject>  getUserDrugsPlanned() {
+
+		// A pragmatic approach to security which does not use much
+		// framework-specific magic. While other approaches
+		// with annotations, etc. are possible they are much more complex while
+		// this is quite easy to understand and
+		// extend.
+		if (userService.isAnonymous()) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+
+		List<UserDrugPlan> userDrugPlanList =  service.getUserDrugPlansByUserId();
+		LOG.info("getUserDrugsPlanned, count of drugs={}", userDrugPlanList.size());
+		IdMap map = UserDrugPlanCreator.createIdMap("");
+		map.withFilter(Filter.regard(Deep.create(2)));
+
+		JsonObject json = new JsonObject();
+		JsonArray userDrugPlanArray = new JsonArray();
+
+		for(UserDrugPlan userDrugPlan : userDrugPlanList) {
+			userDrugPlanArray.add(map.toJsonObject(userDrugPlan));
+		}
+
+		json.add("value", userDrugPlanArray);
+
+		return new ResponseEntity<>(json, HttpStatus.OK);
+
+	}
 }

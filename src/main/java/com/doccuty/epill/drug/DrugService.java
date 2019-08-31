@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.doccuty.epill.userdrugplan.UserDrugPlan;
+import com.doccuty.epill.userdrugplan.UserDrugPlanRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,9 @@ public class DrugService {
 
 	@Autowired
 	ItemInvocationRepository invocationRepository;
+
+	@Autowired
+	UserDrugPlanRepository userDrugPlanRepository;
 	
 	@Autowired
 	DrugFeatureRepository featureRepository;
@@ -239,5 +244,16 @@ public class DrugService {
 			return list.subList(0, 6);
 
 		return list;
+	}
+
+	public List<UserDrugPlan> getUserDrugPlansByUserId() {
+
+		//TODO: add user "cs" to list of test users in SQL scripts -> password hash?
+		// List<UserDrugPlan> userDrugPlans = userDrugPlanRepository.findByUser(userService.getCurrentUser());
+		User user = new User();
+		user.setId(1);
+		List<UserDrugPlan> userDrugPlans = userDrugPlanRepository.findByUser(user);
+		LOG.info("found items={} in UserDrugPlan", userDrugPlans.size());
+		return userDrugPlans;
 	}
 }

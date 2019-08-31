@@ -22,6 +22,7 @@
 package com.doccuty.epill.drug;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -50,6 +51,7 @@ import com.doccuty.epill.packagingsection.PackagingSection;
 import com.doccuty.epill.user.User;
 import com.doccuty.epill.model.Packaging;
 import com.doccuty.epill.model.DrugFeature;
+import com.doccuty.epill.userdrugplan.UserDrugPlan;
 
 @Entity
 @Table(name = "drug")
@@ -663,6 +665,65 @@ public class Drug extends SimpleDrug {
 	public ItemInvocation createClicks() {
 		ItemInvocation value = new ItemInvocation();
 		withClicks(value);
+		return value;
+	}
+
+	/********************************************************************
+	 * <pre>
+	 *              one                       many
+	 * Drug ----------------------------------- UserDrugPlan
+	 *              drug                   userDrugPlans
+	 * </pre>
+	 */
+
+	public static final String PROPERTY_USER_DRUG_PLANS = "user_drug_plans";
+
+	@Transient
+	private Set<UserDrugPlan> userDrugPlans = null;
+
+	public Set<UserDrugPlan> getUserDrugPlans() {
+		if (this.clicks == null) {
+			return new HashSet<>();
+		}
+		return this.userDrugPlans;
+	}
+
+	public Drug withUserDrugPlans(UserDrugPlan... value) {
+		if (value == null) {
+			return this;
+		}
+		for (UserDrugPlan item : value) {
+			if (item != null) {
+				if (this.clicks == null) {
+					this.clicks = new HashSet<>();
+				}
+
+				boolean changed = this.userDrugPlans.add(item);
+
+				if (changed) {
+					item.withDrug(this);
+					firePropertyChange(PROPERTY_USER_DRUG_PLANS, null, item);
+				}
+			}
+		}
+		return this;
+	}
+
+	public Drug withoutUserDrugPlans(UserDrugPlan... values) {
+		for (UserDrugPlan item : values) {
+			if ((this.clicks != null) && (item != null)) {
+				if (this.clicks.remove(item)) {
+					item.setDrug(null);
+					firePropertyChange(PROPERTY_CLICKS, item, null);
+				}
+			}
+		}
+		return this;
+	}
+
+	public UserDrugPlan createUserDrugPlans() {
+		UserDrugPlan value = new UserDrugPlan();
+		withUserDrugPlans(value);
 		return value;
 	}
 

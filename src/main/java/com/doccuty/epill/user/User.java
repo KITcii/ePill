@@ -46,6 +46,10 @@ import com.doccuty.epill.model.util.DiseaseSet;
 import com.doccuty.epill.model.util.DrugFeatureSet;
 import com.doccuty.epill.model.util.DrugSet;
 import com.doccuty.epill.model.DrugFeature;
+import com.doccuty.epill.userdrugplan.UserDrugPlan;
+
+import java.util.HashSet;
+
    /**
     * 
     * @see <a href='../../../../../../../src/test/java/com/doccuty/epill/model/SDMLib/ModelCreator.java'>ModelCreator.java</a>
@@ -63,6 +67,7 @@ import com.doccuty.epill.model.DrugFeature;
       setLanguage(null);
       setGender(null);
       withoutClicks(this.getClicks().toArray(new ItemInvocation[this.getClicks().size()]));
+      withoutUserDrugPlans(this.getUserDrugPlans().toArray(new UserDrugPlan[this.getUserDrugPlans().size()]));
       withoutQuery(this.getQuery().toArray(new UserQuery[this.getQuery().size()]));
       withoutDisease(this.getDisease().toArray(new Disease[this.getDisease().size()]));
       firePropertyChange("REMOVE_YOU", this, null);
@@ -628,14 +633,82 @@ import com.doccuty.epill.model.DrugFeature;
       return this;
    }
 
-   public ItemInvocation createClicks()
+   /*public ItemInvocation createClicks()
    {
       ItemInvocation value = new ItemInvocation();
       withClicks(value);
       return value;
-   } 
+   }*/
 
-   
+   /********************************************************************
+    * <pre>
+    *              one                       many
+    * User ----------------------------------- UserDrugPlan
+    *              user                   clicks
+    * </pre>
+    */
+
+   public static final String PROPERTY_USER_DRUG_PLAN = "user_drug_plans";
+   @OneToMany(cascade=CascadeType.ALL, mappedBy="user")
+   private Set<UserDrugPlan> userDrugPlans = null;
+
+   public Set<UserDrugPlan> getUserDrugPlans()
+   {
+      if (this.userDrugPlans == null)
+      {
+         return new HashSet<>();
+      }
+      return this.userDrugPlans;
+   }
+
+   public User withUserDrugPlans(UserDrugPlan... value)
+   {
+      if(value==null){
+         return this;
+      }
+      for (UserDrugPlan item : value)
+      {
+         if (item != null)
+         {
+            if (this.userDrugPlans == null)
+            {
+               this.userDrugPlans = new HashSet<>();
+            }
+            boolean changed = this.userDrugPlans.add (item);
+            if (changed)
+            {
+               item.withUser(this);
+               firePropertyChange(PROPERTY_USER_DRUG_PLAN, null, item);
+            }
+         }
+      }
+      return this;
+   }
+
+   public User withoutUserDrugPlans(UserDrugPlan... value)
+   {
+      for (UserDrugPlan item : value)
+      {
+         if ((this.userDrugPlans != null) && (item != null))
+         {
+            if (this.userDrugPlans.remove(item))
+            {
+               item.setUser(null);
+               firePropertyChange(PROPERTY_USER_DRUG_PLAN, item, null);
+            }
+         }
+      }
+      return this;
+   }
+
+/*   public UserDrugPlan createUserDrugPlan()
+   {
+      UserDrugPlan value = new UserDrugPlan();
+      withUserDrugPlans(value);
+      return value;
+   }*/
+
+
    /********************************************************************
     * <pre>
     *              one                       many

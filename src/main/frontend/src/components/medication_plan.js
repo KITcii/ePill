@@ -15,8 +15,22 @@ class MedicationPlan extends React.Component {
 
     }
 
+    // This function is called before render() to initialize its state.
+    componentWillMount() {
+        this.getData();
+    }
 
-	// for html conversion
+    getData() {
+        this.state.loading	= true;
+        this.setState(this.state);
+        axios.get('/drug/list/userdrugplanned')
+            .then(({data}) => {
+                this.state.userdrugplanned = data.value;
+            });
+    }
+
+
+    // for html conversion
 	createMarkup(text) { return {__html: text}; };
 	    
     render() {
@@ -24,10 +38,8 @@ class MedicationPlan extends React.Component {
         var tempDate = new Date();
         var date = tempDate.getDate() + '.' + (tempDate.getMonth()+1) + '.' + tempDate.getFullYear();
         var time = tempDate.getHours() + ':' + tempDate.getMinutes();
-        axios.get('/drug/list/taking')
-            .then(({data}) => {
-                this.state.drugs = data.value;
-            });
+        const drugs			= this.state.drugs;
+
         return (
         	<div>
                 {this.state.drugs.length < 1 ? (
@@ -53,6 +65,7 @@ class MedicationPlan extends React.Component {
                                 </div>
                                 <h3 class="text-center">{t('medicationPlan')}</h3>
                                 <h5>{t('for') + ' ' + date} </h5>
+                                <p>you have {userdrugplanned.length()} planned drugs</p>
                             </div>
                             <div className="col-md-12" dangerouslySetInnerHTML={this.createMarkup(t('medicationPlan'))} />
                         </div>

@@ -36,6 +36,9 @@ Unklar:
 
 TODO: Erweiterung Datenstruktur / DB
 - Medikament = SimpleDrug erweitern um int halfTimePeriod
+  (Annahme: jedes Medikament hat nur eine wesentliche aktive Substanz)
+-   
+  
 - Medikament erweitern um Liste von Texten / Strings takingInformation -> 1:n Beziehung
   prüfen, ob das auf der DB bereits vorhanden ist
 - Medikament erweitern um default Dosis pro Tag -> defaultDosePerDay
