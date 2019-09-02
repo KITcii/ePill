@@ -717,3 +717,30 @@ a.wide { display : block }
 .font-size-list li span {
 	height: 40px;
 }
+
+/*Medication-Plan*/
+
+.btn-date-change {
+	color: black;
+	background-color: white;
+	margin-left: 10px;
+	margin-right: 10px;
+	display: inline-block;
+}
+
+.text-date-change {
+	padding-left: 10px;
+	padding-right: 10px; 
+	display: block;
+	font-size: 1.17em;
+	margin-top: 1em;
+	margin-bottom: 1em;
+	margin-left: 0;
+	margin-right: 0;
+	font-weight: bold;
+}
+
+.btn-add-drug{
+	float: right;
+	color: white;
+}

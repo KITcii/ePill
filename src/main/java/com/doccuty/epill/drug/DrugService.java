@@ -250,10 +250,8 @@ public class DrugService {
 
 		//TODO: add user "cs" to list of test users in SQL scripts -> password hash?
 		// List<UserDrugPlan> userDrugPlans = userDrugPlanRepository.findByUser(userService.getCurrentUser());
-		User user = new User();
-		user.setId(1);
-		List<UserDrugPlan> userDrugPlans = userDrugPlanRepository.findByUser(user);
-		LOG.info("found items={} in UserDrugPlan", userDrugPlans.size());
-		return userDrugPlans;
+		final List<UserDrugPlan> userDrugPlans = userDrugPlanRepository.findByUser(userService.getCurrentUser());
+        LOG.info("found items={} in UserDrugPlan", userDrugPlans.size());
+        return userDrugPlans;
 	}
 }
