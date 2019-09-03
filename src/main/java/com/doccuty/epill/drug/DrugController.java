@@ -1,5 +1,6 @@
 package com.doccuty.epill.drug;
 
+import java.util.Date;
 import java.util.List;
 
 import com.doccuty.epill.model.util.UserDrugPlanCreator;
@@ -7,6 +8,7 @@ import com.doccuty.epill.userdrugplan.UserDrugPlan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -398,38 +400,42 @@ public class DrugController {
 	    	return new ResponseEntity<>(json, HttpStatus.OK);
     }
 
-	/**
-	 * get all planned drugs for user
-	 *
-	 * @return
-	 */
-	@RequestMapping(value={"/list/userdrugplanned"}, method = RequestMethod.GET)
-	public  ResponseEntity<JsonObject>  getUserDrugsPlanned() {
+    /**
+     * get all planned drugs for user
+     *
+     * @return
+     */
+    @RequestMapping(value = { "/list/userdrugplanned/date" }, method = RequestMethod.GET)
+    public ResponseEntity<JsonObject> getUserDrugsPlannedByDay(@RequestParam(value = "date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date day) {
 
-		// A pragmatic approach to security which does not use much
-		// framework-specific magic. While other approaches
-		// with annotations, etc. are possible they are much more complex while
-		// this is quite easy to understand and
-		// extend.
-		if (userService.isAnonymous()) {
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		}
 
-		List<UserDrugPlan> userDrugPlanList =  service.getUserDrugPlansByUserId();
-		LOG.info("getUserDrugsPlanned, count of drugs={}", userDrugPlanList.size());
-		IdMap map = UserDrugPlanCreator.createIdMap("");
-		map.withFilter(Filter.regard(Deep.create(2)));
+            // A pragmatic approach to security which does not use much
+            // framework-specific magic. While other approaches
+            // with annotations, etc. are possible they are much more complex while
+            // this is quite easy to understand and
+            // extend.
+            if (userService.isAnonymous()) {
+                    return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
 
-		JsonObject json = new JsonObject();
-		JsonArray userDrugPlanArray = new JsonArray();
+            final Date nextDay = new Date(day.getTime() + (24 * 60 * 60 * 1000));
+            final List<UserDrugPlan> userDrugPlanList = service.getUserDrugPlansByUserIdAndDate(day, nextDay);
+            LOG.info("getUserDrugsPlanned, count of drugs={}", userDrugPlanList.size());
+            final IdMap map = UserDrugPlanCreator.createIdMap("");
+            map.withFilter(Filter.regard(Deep.create(2)));
 
-		for(UserDrugPlan userDrugPlan : userDrugPlanList) {
-			userDrugPlanArray.add(map.toJsonObject(userDrugPlan));
-		}
+            final JsonObject json = new JsonObject();
+            final JsonArray userDrugPlanArray = new JsonArray();
 
-		json.add("value", userDrugPlanArray);
+            for (final UserDrugPlan userDrugPlan : userDrugPlanList) {
+                    userDrugPlanArray.add(map.toJsonObject(userDrugPlan));
+            }
 
-		return new ResponseEntity<>(json, HttpStatus.OK);
+            json.add("value", userDrugPlanArray);
 
-	}
+            return new ResponseEntity<>(json, HttpStatus.OK);
+
+    }
+
+
 }

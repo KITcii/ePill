@@ -3,6 +3,7 @@ package com.doccuty.epill.drug;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import com.doccuty.epill.userdrugplan.UserDrugPlan;
@@ -248,10 +249,17 @@ public class DrugService {
 
 	public List<UserDrugPlan> getUserDrugPlansByUserId() {
 
-		//TODO: add user "cs" to list of test users in SQL scripts -> password hash?
-		// List<UserDrugPlan> userDrugPlans = userDrugPlanRepository.findByUser(userService.getCurrentUser());
 		final List<UserDrugPlan> userDrugPlans = userDrugPlanRepository.findByUser(userService.getCurrentUser());
-        LOG.info("found items={} in UserDrugPlan", userDrugPlans.size());
-        return userDrugPlans;
+		LOG.info("found items={} in UserDrugPlan", userDrugPlans.size());
+		return userDrugPlans;
 	}
+
+	public List<UserDrugPlan> getUserDrugPlansByUserIdAndDate(Date dateFrom, Date dateTo) {
+
+		final Long userId = userService.getCurrentUser().getId();
+		final List<UserDrugPlan> userDrugPlans = userDrugPlanRepository.findByUserBetweenDates(userId, dateFrom, dateTo);
+		LOG.info("found items={} in UserDrugPlan", userDrugPlans.size());
+		return userDrugPlans;
+	}
+	
 }

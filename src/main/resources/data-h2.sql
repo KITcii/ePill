@@ -616,3 +616,12 @@ INSERT INTO tailored_text (id, idgender, iddrug, min_age, max_age, is_minimum, t
 -- user_drug_plan
 INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(1, 1, 2, '2019-08-21 09:00:00');
 INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(2, 2, 2, '2019-08-21 13:00:00');
+
+INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(11, 1, 2, '2019-08-21 09:00:00');
+INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(12, 2, 2, '2019-08-21 13:00:00');
+INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(13, 1, 2, '2019-09-01 09:00:00');
+INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(14, 2, 2, '2019-09-01 13:00:00');
+INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(15, 1, 2, '2019-09-02 09:00:00');
+INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(16, 2, 2, '2019-09-02 13:00:00');
+INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(17, 1, 2, '2019-09-02 09:00:00');
+INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(18, 2, 2, '2019-09-02 13:00:00');
