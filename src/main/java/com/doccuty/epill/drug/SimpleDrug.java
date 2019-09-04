@@ -336,4 +336,34 @@ import de.uniks.networkparser.EntityUtil;
       setName(value);
       return this;
    } 
+   
+//==========================================================================
+   
+   public static final String PROPERTY_HALF_TIME_PERIOD = "period";
+   
+   @JoinColumn(name = "period")
+   private int period;
+
+   public int getPeriod()
+   {
+      return this.period;
+   }
+   
+   public void setPeriod(int value)
+   {
+      if (this.period != value) {
+      
+         int oldValue = this.period;
+         this.period = value;
+         this.firePropertyChange(PROPERTY_HALF_TIME_PERIOD, oldValue, value);
+      }
+   }
+   
+   public SimpleDrug withPeriod(int value)
+   {
+      setPeriod(value);
+      return this;
+   }
 }
+
+

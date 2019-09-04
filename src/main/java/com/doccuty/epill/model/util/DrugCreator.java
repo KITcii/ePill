@@ -66,7 +66,8 @@ public class DrugCreator implements SendableEntityCreatorNoIndex
       Drug.PROPERTY_TAKEN,
       Drug.PROPERTY_YEAR,
       Drug.PROPERTY_STATUS,
-      Drug.PROPERTY_VERSION
+      Drug.PROPERTY_VERSION,
+      Drug.PROPERTY_HALF_TIME_PERIOD
    };
    
    @Override
@@ -190,6 +191,11 @@ public class DrugCreator implements SendableEntityCreatorNoIndex
       if (Drug.PROPERTY_DRUGFEATURE.equalsIgnoreCase(attribute))
       {
          return ((Drug) target).getDrugFeature();
+      }
+      
+      if (Drug.PROPERTY_HALF_TIME_PERIOD.equalsIgnoreCase(attribute))
+      {
+         return ((Drug) target).getPeriod();
       }
       
       return null;
@@ -369,6 +375,12 @@ public class DrugCreator implements SendableEntityCreatorNoIndex
       if (Drug.PROPERTY_DRUGFEATURE.equalsIgnoreCase(attrName))
       {
          ((Drug) target).withDrugFeature((DrugFeature) value);
+         return true;
+      }
+      
+      if (Drug.PROPERTY_HALF_TIME_PERIOD.equalsIgnoreCase(attrName))
+      {
+         ((Drug) target).setPeriod((int) value);
          return true;
       }
       

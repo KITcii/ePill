@@ -31,6 +31,7 @@ public class DrugService {
 
 	private static final String PROPERTY_DRUG_REMEMBER = "remember";
 	
+	
 	@Autowired
 	DrugRepository repository;
 
@@ -260,6 +261,13 @@ public class DrugService {
 		final List<UserDrugPlan> userDrugPlans = userDrugPlanRepository.findByUserBetweenDates(userId, dateFrom, dateTo);
 		LOG.info("found items={} in UserDrugPlan", userDrugPlans.size());
 		return userDrugPlans;
+	}
+	
+	public int findHalftimeperiodByDrug(Drug drug) {
+		
+		final int halfTimePeriod = repository.findHalftimeperiod(drug);
+		LOG.info("found halftimeperiod={} in SimpleDrug", halfTimePeriod);
+		return halfTimePeriod;
 	}
 	
 }

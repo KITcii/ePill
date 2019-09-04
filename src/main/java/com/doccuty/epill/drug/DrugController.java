@@ -401,40 +401,95 @@ public class DrugController {
     }
 
     /**
-     * get all planned drugs for user
-     *
+	 * get all planned drugs for user
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = { "/list/userdrugplanned" }, method = RequestMethod.GET)
+	public ResponseEntity<JsonObject> getUserDrugsPlanned() {
+
+		// A pragmatic approach to security which does not use much
+		// framework-specific magic. While other approaches
+		// with annotations, etc. are possible they are much more complex while
+		// this is quite easy to understand and
+		// extend.
+		if (userService.isAnonymous()) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+
+		final List<UserDrugPlan> userDrugPlanList = service.getUserDrugPlansByUserId();
+		LOG.info("getUserDrugsPlanned, count of drugs={}", userDrugPlanList.size());
+		final IdMap map = UserDrugPlanCreator.createIdMap("");
+		map.withFilter(Filter.regard(Deep.create(2)));
+
+		final JsonObject json = new JsonObject();
+		final JsonArray userDrugPlanArray = new JsonArray();
+
+		for (final UserDrugPlan userDrugPlan : userDrugPlanList) {
+			userDrugPlanArray.add(map.toJsonObject(userDrugPlan));
+		}
+
+		json.add("value", userDrugPlanArray);
+
+		return new ResponseEntity<>(json, HttpStatus.OK);
+	}
+
+	/**
+	 * get planned drugs for user for day
+	 * 
+	 * @param day
+	 * @return
+	 */
+	@RequestMapping(value = { "/list/userdrugplanned/date" }, method = RequestMethod.GET)
+	public ResponseEntity<JsonObject> getUserDrugsPlannedByDay(
+			@RequestParam(value = "date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date day) {
+
+		// A pragmatic approach to security which does not use much
+		// framework-specific magic. While other approaches
+		// with annotations, etc. are possible they are much more complex while
+		// this is quite easy to understand and
+		// extend.
+		if (userService.isAnonymous()) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+
+		final Date nextDay = new Date(day.getTime() + (24 * 60 * 60 * 1000));
+		final List<UserDrugPlan> userDrugPlanList = service.getUserDrugPlansByUserIdAndDate(day, nextDay);
+		LOG.info("getUserDrugsPlanned, count of drugs={}", userDrugPlanList.size());
+		final IdMap map = UserDrugPlanCreator.createIdMap("");
+		map.withFilter(Filter.regard(Deep.create(2)));
+
+		final JsonObject json = new JsonObject();
+		final JsonArray userDrugPlanArray = new JsonArray();
+
+		for (final UserDrugPlan userDrugPlan : userDrugPlanList) {
+			userDrugPlanArray.add(map.toJsonObject(userDrugPlan));
+		}
+
+		json.add("value", userDrugPlanArray);
+
+		return new ResponseEntity<>(json, HttpStatus.OK);
+
+	}
+	
+	/**
+     * get halftimeperiod for drug
+     * @param drug
      * @return
      */
-    @RequestMapping(value = { "/list/userdrugplanned/date" }, method = RequestMethod.GET)
-    public ResponseEntity<JsonObject> getUserDrugsPlannedByDay(@RequestParam(value = "date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date day) {
+    
+    @RequestMapping(value={"/drug"}, method = RequestMethod.GET)
+    public ResponseEntity<JsonObject> getHalftimeperiodByDrug(@PathVariable(value = "drug") Drug drug) {
 
-
-            // A pragmatic approach to security which does not use much
-            // framework-specific magic. While other approaches
-            // with annotations, etc. are possible they are much more complex while
-            // this is quite easy to understand and
-            // extend.
-            if (userService.isAnonymous()) {
-                    return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            }
-
-            final Date nextDay = new Date(day.getTime() + (24 * 60 * 60 * 1000));
-            final List<UserDrugPlan> userDrugPlanList = service.getUserDrugPlansByUserIdAndDate(day, nextDay);
-            LOG.info("getUserDrugsPlanned, count of drugs={}", userDrugPlanList.size());
-            final IdMap map = UserDrugPlanCreator.createIdMap("");
-            map.withFilter(Filter.regard(Deep.create(2)));
-
-            final JsonObject json = new JsonObject();
-            final JsonArray userDrugPlanArray = new JsonArray();
-
-            for (final UserDrugPlan userDrugPlan : userDrugPlanList) {
-                    userDrugPlanArray.add(map.toJsonObject(userDrugPlan));
-            }
-
-            json.add("value", userDrugPlanArray);
-
-            return new ResponseEntity<>(json, HttpStatus.OK);
-
+	    int halfTimePeriod = service.findHalftimeperiodByDrug(drug);
+	    
+	    // generate JSON formatted string
+	    	IdMap map = DrugCreator.createIdMap("");
+		map.withFilter(Filter.regard(Deep.create(2)));
+			
+	    	JsonObject json = map.toJsonObject(halfTimePeriod);   	
+	    	
+		return new ResponseEntity<>(json, HttpStatus.OK);
     }
 
 

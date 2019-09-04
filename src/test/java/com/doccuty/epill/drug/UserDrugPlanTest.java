@@ -21,6 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.doccuty.epill.user.UserService;
 import com.doccuty.epill.userdrugplan.UserDrugPlan;
+import com.doccuty.epill.drug.SimpleDrug;;
 
 // Use Spring's testing support in JUnit
 @RunWith(SpringRunner.class)
@@ -68,4 +69,6 @@ public class UserDrugPlanTest {
 		assertNotNull(userDrugPlanList);
 		assertEquals(2, userDrugPlanList.size());
 	}
+	
+	
 }

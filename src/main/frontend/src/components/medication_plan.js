@@ -14,7 +14,8 @@ class MedicationPlan extends React.Component {
         super(props);
         this.state = {
             drugsplanned: [],
-            date : new Date()
+            date : new Date(),
+            halftimeperiod: 0
         };
         
     }
@@ -30,13 +31,13 @@ class MedicationPlan extends React.Component {
         this.setState(this.state);
         console.log("getting userdrugplanned");
         axios.get("/drug/list/userdrugplanned/date", {
-                  params: {
-                            date: this.state.date
-                          }
-                        }).then(({ data }) => {
-            this.state.drugsplanned = data.value;
-            this.state.loading = false;
-            this.setState(this.state);
+               		params: {
+                          date: this.state.date
+                        }
+                      }).then(({ data }) => {
+         this.state.drugsplanned = data.value;
+         this.state.loading = false;
+         this.setState(this.state);
         });
     }
 
@@ -56,13 +57,36 @@ class MedicationPlan extends React.Component {
         this.getData();
     }
     
+    formatDate(datetime) {
+        var formatted_date = moment(datetime).format("DD.MM.YYYY hh::mm");
+        return formatted_date;
+    }
+    
+    getHalfTimePeriod(drug){
+    	this.state.loading = true;
+        this.setState(this.state);
+        console.log("getting halftimeperiod");
+        axios.get("/drug", {
+               		params: {
+                          drug: drug
+                        }
+                      }).then(({ data }) => {
+         this.state.halftimeperiod = data.value;
+         this.state.loading = false;
+         this.setState(this.state);
+        });
+        return this.state.halftimeperiod;
+    }
+    
     renderDrugsPlanned(drugsplanned) {
         return drugsplanned.map(drugplanned => {
             return (
                 <tr key={drugplanned.id}>
+                	<td>{drugplanned.drug.name}</td>
                 	<td>{this.formatDate(drugplanned.datetime_intake_planned)}</td>
                     <td>{drugplanned.id}</td>
                     <td>{drugplanned.drug.name}</td>
+                    <td>{this.getHalfTimePeriod(drugplanned.drug)} + " hours"</td>
                 </tr>
             );
         });
@@ -73,6 +97,7 @@ class MedicationPlan extends React.Component {
     render() {
         const { t } = this.props;
         const drugsplanned = this.state.drugsplanned;
+        const halfTimePeriod = this.state.halfTimePeriod;
         var formatted_date = moment(this.state.date).format("DD.MM.YYYY");
         return (
             <div className="container no-banner">
