@@ -7,6 +7,7 @@ import {translate} from "react-i18next";
 import Loading from "./loading";
 import User from "./../util/User";
 import moment from 'moment';
+import EmptyList from "./empty_list";
 
 // See https://facebook.github.io/react/docs/forms.html for documentation about forms.
 class MedicationPlan extends React.Component {
@@ -14,8 +15,7 @@ class MedicationPlan extends React.Component {
         super(props);
         this.state = {
             drugsplanned: [],
-            date : new Date(),
-            halftimeperiod: 0
+            date : new Date()
         };
         
     }
@@ -58,35 +58,18 @@ class MedicationPlan extends React.Component {
     }
     
     formatDate(datetime) {
-        var formatted_date = moment(datetime).format("DD.MM.YYYY hh::mm");
+        var formatted_date = moment(datetime).format("hh:mm");
         return formatted_date;
-    }
-    
-    getHalfTimePeriod(drug){
-    	this.state.loading = true;
-        this.setState(this.state);
-        console.log("getting halftimeperiod");
-        axios.get("/drug", {
-               		params: {
-                          drug: drug
-                        }
-                      }).then(({ data }) => {
-         this.state.halftimeperiod = data.value;
-         this.state.loading = false;
-         this.setState(this.state);
-        });
-        return this.state.halftimeperiod;
     }
     
     renderDrugsPlanned(drugsplanned) {
         return drugsplanned.map(drugplanned => {
             return (
                 <tr key={drugplanned.id}>
+                	<td>{drugplanned.id}</td>
                 	<td>{drugplanned.drug.name}</td>
                 	<td>{this.formatDate(drugplanned.datetime_intake_planned)}</td>
-                    <td>{drugplanned.id}</td>
-                    <td>{drugplanned.drug.name}</td>
-                    <td>{this.getHalfTimePeriod(drugplanned.drug)} + " hours"</td>
+                    <td>{drugplanned.drug.period} hours</td>
                 </tr>
             );
         });
@@ -97,7 +80,6 @@ class MedicationPlan extends React.Component {
     render() {
         const { t } = this.props;
         const drugsplanned = this.state.drugsplanned;
-        const halfTimePeriod = this.state.halfTimePeriod;
         var formatted_date = moment(this.state.date).format("DD.MM.YYYY");
         return (
             <div className="container no-banner">

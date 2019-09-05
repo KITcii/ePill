@@ -263,11 +263,5 @@ public class DrugService {
 		return userDrugPlans;
 	}
 	
-	public int findHalftimeperiodByDrug(Drug drug) {
-		
-		final int halfTimePeriod = repository.findHalftimeperiod(drug);
-		LOG.info("found halftimeperiod={} in SimpleDrug", halfTimePeriod);
-		return halfTimePeriod;
-	}
 	
 }

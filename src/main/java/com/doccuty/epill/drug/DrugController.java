@@ -472,25 +472,4 @@ public class DrugController {
 
 	}
 	
-	/**
-     * get halftimeperiod for drug
-     * @param drug
-     * @return
-     */
-    
-    @RequestMapping(value={"/drug"}, method = RequestMethod.GET)
-    public ResponseEntity<JsonObject> getHalftimeperiodByDrug(@PathVariable(value = "drug") Drug drug) {
-
-	    int halfTimePeriod = service.findHalftimeperiodByDrug(drug);
-	    
-	    // generate JSON formatted string
-	    	IdMap map = DrugCreator.createIdMap("");
-		map.withFilter(Filter.regard(Deep.create(2)));
-			
-	    	JsonObject json = map.toJsonObject(halfTimePeriod);   	
-	    	
-		return new ResponseEntity<>(json, HttpStatus.OK);
-    }
-
-
 }

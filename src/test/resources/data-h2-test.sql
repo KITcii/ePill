@@ -134,17 +134,17 @@ INSERT INTO image (id, filename, filetype, uploaded_at, image) VALUES (11,'Aspir
 -- Dumping data for table `drug_simple`
 --
 
-INSERT INTO drug_simple (id, name, number, status, version, year, idimage) VALUES (1,'Accupro® 10 Filmtabletten',0,'3915-06-01','1.59', '2011-1-1', 2);
-INSERT INTO drug_simple (id, name, number, status, version, year, idimage) VALUES (2,'Baymycard',0,'3915-06-01','1.59','2011-1-1', 3);
-INSERT INTO drug_simple (id, name, number, status, version, year, idimage) VALUES (3,'Beloc-Zok® comp',6030,'3915-06-01','1.37','2011-1-1', 4);
-INSERT INTO drug_simple (id, name, number, status, version, year, idimage) VALUES (4,'Cardura',0,'3915-06-01','1.59','2011-1-1', 5);
-INSERT INTO drug_simple (id, name, number, status, version, year, idimage) VALUES (5,'Ciprobay',0,'3915-06-01','1.59','2011-1-1', 6);
-INSERT INTO drug_simple (id, name, number, status, version, year, idimage) VALUES (6,'Clexane',0,'3915-06-01','1.59','2011-1-1', 7);
-INSERT INTO drug_simple (id, name, number, status, version, year, idimage) VALUES (7,'Novalgin',0,'3915-06-01','1.59','2011-1-1', 8);
-INSERT INTO drug_simple (id, name, number, status, version, year, idimage) VALUES (8,'REMINYL® 4 mg/ml Lösung zum Einnehmen',0,'3915-06-01','1.36','2011-1-1', 9);
-INSERT INTO drug_simple (id, name, number, status, version, year, idimage) VALUES (9,'Topiramat-Janssen',0,'3915-06-01','1.0','2011-1-1', 1);
-INSERT INTO drug_simple (id, name, number, status, version, year, idimage) VALUES (10,'Toujeo',0,'3915-06-01','1.59','2011-1-1', 10);
-INSERT INTO drug_simple (id, name, number, status, version, year, idimage) VALUES (11,'Aspirin',0,'3915-06-01','1.59','2019-1-1', 11);
+INSERT INTO drug_simple (id, name, number, status, version, year, idimage, period) VALUES (1,'Accupro® 10 Filmtabletten',0,'3915-06-01','1.59', '2011-1-1', 2, 2);
+INSERT INTO drug_simple (id, name, number, status, version, year, idimage, period) VALUES (2,'Baymycard',0,'3915-06-01','1.59','2011-1-1', 3, 2);
+INSERT INTO drug_simple (id, name, number, status, version, year, idimage, period) VALUES (3,'Beloc-Zok® comp',6030,'3915-06-01','1.37','2011-1-1', 4, 4);
+INSERT INTO drug_simple (id, name, number, status, version, year, idimage, period) VALUES (4,'Cardura',0,'3915-06-01','1.59','2011-1-1', 5, 2);
+INSERT INTO drug_simple (id, name, number, status, version, year, idimage, period) VALUES (5,'Ciprobay',0,'3915-06-01','1.59','2011-1-1', 6, 4);
+INSERT INTO drug_simple (id, name, number, status, version, year, idimage, period) VALUES (6,'Clexane',0,'3915-06-01','1.59','2011-1-1', 7, 4);
+INSERT INTO drug_simple (id, name, number, status, version, year, idimage, period) VALUES (7,'Novalgin',0,'3915-06-01','1.59','2011-1-1', 8, 4);
+INSERT INTO drug_simple (id, name, number, status, version, year, idimage, period) VALUES (8,'REMINYL® 4 mg/ml Lösung zum Einnehmen',0,'3915-06-01','1.36','2011-1-1', 9, 5);
+INSERT INTO drug_simple (id, name, number, status, version, year, idimage, period) VALUES (9,'Topiramat-Janssen',0,'3915-06-01','1.0','2011-1-1', 1, 3);
+INSERT INTO drug_simple (id, name, number, status, version, year, idimage, period) VALUES (10,'Toujeo',0,'3915-06-01','1.59','2011-1-1', 10, 4);
+INSERT INTO drug_simple (id, name, number, status, version, year, idimage, period) VALUES (11,'Aspirin',0,'3915-06-01','1.59','2019-1-1', 11, 3);
 
 
 --

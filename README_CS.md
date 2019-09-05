@@ -35,8 +35,8 @@ Unklar:
 
 
 TODO: Erweiterung Datenstruktur / DB
-- Medikament = SimpleDrug erweitern um int halfTimePeriod
-  (Annahme: jedes Medikament hat nur eine wesentliche aktive Substanz)
+X Medikament = SimpleDrug erweitern um int halfTimePeriod
+  (Annahme: jedes Medikament hat nur eine wesentliche aktive Substanz) = erledigt
 -   
   
 - Medikament erweitern um Liste von Texten / Strings takingInformation -> 1:n Beziehung
