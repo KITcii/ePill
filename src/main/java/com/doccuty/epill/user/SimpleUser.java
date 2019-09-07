@@ -463,5 +463,77 @@ public class SimpleUser implements SendableEntity {
 		setWeight(value);
 		return this;
 	}
+	
+	// ==========================================================================
+
+		public static final String PROPERTY_BREAKFAST_TIME = "breakfasttime";
+		
+		 @Column(name = "breakfast_time")
+		private int breakfastTime;
+
+		public int getBreakfastTime() {
+			return this.breakfastTime;
+		}
+
+		public void setBreakfastTime(int value) {
+			if (this.breakfastTime != value) {
+				int oldValue = this.breakfastTime;
+				this.breakfastTime = value;
+				this.firePropertyChange(PROPERTY_BREAKFAST_TIME, oldValue, value);
+			}
+		}
+
+		public SimpleUser withBreakfastTime(int value) {
+			setBreakfastTime(value);
+			return this;
+		}
+		
+		// ==========================================================================
+		
+		public static final String PROPERTY_LUNCH_TIME = "lunchtime";
+		
+		@Column(name = "lunch_time")
+		private int lunchTime;
+
+		public int getLunchTime() {
+			return this.lunchTime;
+		}
+
+		public void setLunchTime(int value) {
+			if (this.lunchTime != value) {
+				int oldValue = this.lunchTime;
+				this.lunchTime = value;
+				this.firePropertyChange(PROPERTY_LUNCH_TIME, oldValue, value);
+			}
+		}
+
+		public SimpleUser withLunchTime(int value) {
+			setLunchTime(value);
+			return this;
+		}
+		
+		// ==========================================================================
+		
+		public static final String PROPERTY_DINNER_TIME = "dinnertime";
+		
+		@Column(name = "dinner_time")
+		private int dinnerTime;
+
+		public int getDinnerTime() {
+			return this.dinnerTime;
+		}
+
+		public void setDinnerTime(int value) {
+			if (this.dinnerTime != value) {
+				int oldValue = this.dinnerTime;
+				this.dinnerTime = value;
+				this.firePropertyChange(PROPERTY_DINNER_TIME, oldValue, value);
+			}
+		}
+
+		public SimpleUser withDinnerTime(int value) {
+			setDinnerTime(value);
+			return this;
+		}
 
 }

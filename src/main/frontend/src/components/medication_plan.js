@@ -58,19 +58,22 @@ class MedicationPlan extends React.Component {
         return formatted_date;
     }
     
-    renderDrugsPlanned(drugsplanned) {
+    
+    renderDrugsPlanned(drugsplanned) {   
         return drugsplanned.map(drugplanned => {
             return (
-            		<table class="table">
-            	    <tbody>
-            	    	<tr key={drugplanned.id}>
-		                	<td>{drugplanned.id}</td>
-		                	<td>{drugplanned.drug.name}</td>
-		                	<td>{this.formatDate(drugplanned.datetime_intake_planned)}</td>
-		                    <td>{drugplanned.drug.period} hours</td>
-		                </tr>
-            	    </tbody>
-            	  </table>            	
+            	    	<tr key={drugplanned.id} className="table-line-hover">
+	            	    	<td className="td-style">
+		                        <div className="progress">
+		                          <div className="progress-bar" style={{ width: "50%" }}></div>
+		                        </div>
+	                        </td>
+	                        <td className="td-style">
+	                        	<input type="checkbox" value=""></input>
+	                        </td>
+		                	<td className="td-style">{this.formatDate(drugplanned.datetime_intake_planned)}</td>
+		                    <td className="td-style">{drugplanned.drug.name} hours</td>
+		                </tr>           	
             );
         });
     }
@@ -107,6 +110,7 @@ class MedicationPlan extends React.Component {
         const { t } = this.props;
         const drugsplanned = this.state.drugsplanned;
         var formatted_date = moment(this.state.date).format("DD.MM.YYYY");
+        
         return (
             <div className="container no-banner">
                 <div className="page-header">
@@ -122,7 +126,7 @@ class MedicationPlan extends React.Component {
                             <span className="glyphicon glyphicon-triangle-right"></span>
                             </button>
                             <button type="button" className="btn btn-sm btn-add btn-add-drug">{t("addDrugsToMedicationPlan")}</button>
-                            <button type="button" className="btn btn-like btn-sm" onClick={() => this.recalculatePlan()}>{t("recalculatePlan")}
+                            <button type="button" className="btn btn-sm btn-recalculate" onClick={() => this.recalculatePlan()}>{t("recalculatePlan")}
                             	<span className="glyphicon glyphicon-white glyphicon-refresh"></span>
                         	</button>
                         </div>
@@ -140,8 +144,14 @@ class MedicationPlan extends React.Component {
                             <EmptyList />
                         )}
                         {!this.state.loading && drugsplanned && drugsplanned.length > 0 && (
-                            <table id="drugsplanned">
-                                <tbody>{this.renderDrugsPlanned(drugsplanned)}</tbody>
+                            <table id="drugsplanned" className="table-style">
+		                            <thead>
+			                            <th className="th-style">half-time-period</th>
+			                            <th className="th-style"></th>
+			                            <th className="th-style">time</th>
+			                            <th className="th-style">name</th>
+		                            </thead>
+		                            {this.renderDrugsPlanned(drugsplanned)}
                             </table>                           
                         )}
                     </div>

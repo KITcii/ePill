@@ -75,12 +75,12 @@ INSERT INTO country (id, name) VALUES (2,'Frankreich');
 -- Dumping data for table `user_simple`
 --
 
-INSERT INTO user_simple (id, date_of_birth, date_of_registration, email, firstname, lastname, level_of_detail, password, preferred_font_size, salt, username, red_green_colorblind)
+INSERT INTO user_simple (id, date_of_birth, date_of_registration, email, firstname, lastname, level_of_detail, password, preferred_font_size, salt, username, red_green_colorblind, breakfast_time, lunch_time, dinner_time)
 	VALUES
-	(1,'1990-09-21','2015-06-27 13:16:01','n.kannengiesser@web.de','Niclas','Kannengiesser',3,'89794011ed99bae7b5062920bffbef2a334dca75628975cd9cce51ba9691b12843beaed302416bdee221796816346fdeb618903cfa887945174237c92dc2dd2a','defaultFontSize','[B@63ba2cf8','nic', true);
-INSERT INTO user_simple (id, date_of_birth, date_of_registration, email, firstname, lastname, level_of_detail, password, preferred_font_size, salt, username, red_green_colorblind)
+	(1,'1990-09-21','2015-06-27 13:16:01','n.kannengiesser@web.de','Niclas','Kannengiesser',3,'89794011ed99bae7b5062920bffbef2a334dca75628975cd9cce51ba9691b12843beaed302416bdee221796816346fdeb618903cfa887945174237c92dc2dd2a','defaultFontSize','[B@63ba2cf8','nic', true, 8, 13, 19);
+INSERT INTO user_simple (id, date_of_birth, date_of_registration, email, firstname, lastname, level_of_detail, password, preferred_font_size, salt, username, red_green_colorblind, breakfast_time, lunch_time, dinner_time)
     VALUES
-    (2,'1995-09-18','2019-09-01 12:00:00','cs@test.de','Christina','Speck',3,'cca69a44146a648c096757dfa37984d0357dfcf2e40227905b730ccc5653f23e919e226c39380a091975c87fd369e87dbd7856018c4d7f99b2a4db8ddec22416','defaultFontSize','[B@63ba2cf8','cs', false);
+    (2,'1995-09-18','2019-09-01 12:00:00','cs@test.de','Christina','Speck',3,'cca69a44146a648c096757dfa37984d0357dfcf2e40227905b730ccc5653f23e919e226c39380a091975c87fd369e87dbd7856018c4d7f99b2a4db8ddec22416','defaultFontSize','[B@63ba2cf8','cs', false, 7, 12, 18);
 --
 -- Dumping data for table `user_`
 --
