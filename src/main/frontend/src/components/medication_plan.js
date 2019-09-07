@@ -46,10 +46,6 @@ class MedicationPlan extends React.Component {
         return { __html: text };
     }
     
-    update(){
-    	this.forceUpdate();
-    }
-    
     changeDate (incrementBy) {
         console.log("setDate");
         this.state.date.setTime(this.state.date.getTime() + incrementBy * 86400000);
@@ -65,18 +61,48 @@ class MedicationPlan extends React.Component {
     renderDrugsPlanned(drugsplanned) {
         return drugsplanned.map(drugplanned => {
             return (
-                <tr key={drugplanned.id}>
-                	<td>{drugplanned.id}</td>
-                	<td>{drugplanned.drug.name}</td>
-                	<td>{this.formatDate(drugplanned.datetime_intake_planned)}</td>
-                    <td>{drugplanned.drug.period} hours</td>
-                </tr>
+            		<table class="table">
+            	    <tbody>
+            	    	<tr key={drugplanned.id}>
+		                	<td>{drugplanned.id}</td>
+		                	<td>{drugplanned.drug.name}</td>
+		                	<td>{this.formatDate(drugplanned.datetime_intake_planned)}</td>
+		                    <td>{drugplanned.drug.period} hours</td>
+		                </tr>
+            	    </tbody>
+            	  </table>            	
             );
         });
     }
+    
+    recalculatePlan() {
+        console.log("recalculating user drug plan");
+	 	axios.post('/drug/userdrugplanned/calculate/date', { date: moment(this.state.date).format("DD.MM.YYYY")}, {
+            validateStatus: (status) => {
+                return (status >= 200 && status < 300) || status == 400 || status == 401
+            }
+ 		})
+     .then(({data, status}) => {
+         const {t} = this.props;
+         const options = {
+         	    position: toast.POSITION.BOTTOM_CENTER
+         };
+         
+         switch (status) {
+             case 200:
+            	 	toast.success('drug plan recalculated', options);
+            	 this.getData();
+                 break;
+             case 400:
+              	toast.error('recalculation of drug plan failed', options);
+                 break;
+             case 401:
+             	console.log(data, "not permitted");
+                	break;
+         }
+     	});
+    }
 
-    
-    
     render() {
         const { t } = this.props;
         const drugsplanned = this.state.drugsplanned;
@@ -96,15 +122,15 @@ class MedicationPlan extends React.Component {
                             <span className="glyphicon glyphicon-triangle-right"></span>
                             </button>
                             <button type="button" className="btn btn-sm btn-add btn-add-drug">{t("addDrugsToMedicationPlan")}</button>
+                            <button type="button" className="btn btn-like btn-sm" onClick={() => this.recalculatePlan()}>{t("recalculatePlan")}
+                            	<span className="glyphicon glyphicon-white glyphicon-refresh"></span>
+                        	</button>
                         </div>
                 </div>
                 <div>
                     {drugsplanned.length > 1 && User.isAuthenticated() && (
                         <div>
                             <p>you have {drugsplanned.length} planned drugs</p>
-                            <button type="button" className="btn btn-like btn-sm" onClick={() => this.update()}>
-                                <span className="glyphicon glyphicon-white glyphicon-refresh"></span>
-                            </button>
                         </div>
                     )}
 
@@ -116,7 +142,7 @@ class MedicationPlan extends React.Component {
                         {!this.state.loading && drugsplanned && drugsplanned.length > 0 && (
                             <table id="drugsplanned">
                                 <tbody>{this.renderDrugsPlanned(drugsplanned)}</tbody>
-                            </table>
+                            </table>                           
                         )}
                     </div>
                 </div>

@@ -1,5 +1,7 @@
 package com.doccuty.epill.drug;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -470,6 +472,45 @@ public class DrugController {
 
 		return new ResponseEntity<>(json, HttpStatus.OK);
 
+	}
+
+	 //@RequestMapping(value = "/userdrugplanned/calculate/date", method = RequestMethod.POST)
+	 //   public ResponseEntity<Object> recalculateDrugPlan(@RequestBody @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date) {
+	 /**
+     * recalculate drug plan at day for logged in user 
+     *  
+     * @param date
+     * @return
+     */
+    @RequestMapping(value = "/userdrugplanned/calculate/date", method = RequestMethod.POST)
+    public ResponseEntity<Object> recalculateDrugPlan(@RequestBody String dateString) {
+		// A pragmatic approach to security which does not use much
+		// framework-specific magic. While other approaches
+		// with annotations, etc. are possible they are much more complex while
+		// this is quite easy to understand and
+		// extend.
+   		LOG.info("recalculating user drug plan for day {}", dateString);
+		if (userService.isAnonymous()) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+		
+   		service.recalculateUserDrugPlan(parseDateString(dateString));
+
+   		LOG.info("user drug plan recalculated");
+    		
+		return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+	private Date parseDateString(String dateString) {
+		SimpleDateFormat formatter = new SimpleDateFormat("DD.MM.YYYY");
+		try {
+
+			Date date = formatter.parse(dateString);
+			LOG.info("converted date {}", date);
+			return date;
+		} catch (ParseException e) {
+			return new Date();
+		}
 	}
 	
 }

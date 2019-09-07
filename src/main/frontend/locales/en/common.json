@@ -89,5 +89,6 @@
     "medicationEmpty": "Your Medication Plan is empty. If...<br>",
     "addDrugsToMedicationPlan": "add drugs to your Medication Plan",
 	"weight": "weight",
-	"for": "for"
+	"for": "for",
+	"recalculatePlan": "recalculate plan"
 }

@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.doccuty.epill.userdrugplan.UserDrugPlan;
+import com.doccuty.epill.userdrugplan.UserDrugPlanCalculator;
 import com.doccuty.epill.userdrugplan.UserDrugPlanRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -262,6 +263,15 @@ public class DrugService {
 		LOG.info("found items={} in UserDrugPlan", userDrugPlans.size());
 		return userDrugPlans;
 	}
-	
-	
+
+	/**
+	 * recalculate drug plan at day for logged in user 
+	 * @param date
+	 */
+	public boolean recalculateUserDrugPlan(Date date) {
+		LOG.info("recalculate drug plan");
+
+		UserDrugPlanCalculator calculator = new UserDrugPlanCalculator(userService.getCurrentUser());
+		return calculator.calculatePlanForDay(date);
+	}
 }
