@@ -1,11 +1,9 @@
 package com.doccuty.epill.drug;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -19,9 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.doccuty.epill.user.User;
 import com.doccuty.epill.user.UserService;
+import com.doccuty.epill.userdrugplan.DateUtils;
 import com.doccuty.epill.userdrugplan.UserDrugPlan;
-import com.doccuty.epill.drug.SimpleDrug;;
+import com.doccuty.epill.userdrugplan.UserDrugPlanCalculator;
+import com.doccuty.epill.userdrugplan.UserDrugPlanRepository;;
 
 // Use Spring's testing support in JUnit
 @RunWith(SpringRunner.class)
@@ -35,6 +36,9 @@ public class UserDrugPlanCalculatorTest {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private UserDrugPlanRepository userDrugPlanRepository;
 
 	@Before
 	public void setup() {
@@ -52,12 +56,17 @@ public class UserDrugPlanCalculatorTest {
 
 	@Test
 	@Transactional
-	public void testCalculateUserTestplan() {
-		LOG.info("testing UserDrugPlan calculator");
-		final Date date = new Date();
-		boolean succeeded = drugService.recalculateUserDrugPlan(date);
-		assertEquals(true, succeeded);
+	public void testCalculatePlan() {
+		LOG.info("testing calculating plan");
+
+		final Date testDay = new Date();
+		final User currentUser = userService.findUserById(userService.getCurrentUser().getId());
+		final UserDrugPlanCalculator calculator = new UserDrugPlanCalculator(currentUser,
+				drugService.findUserDrugsTaking(currentUser));
+		final List<UserDrugPlan> planForDay = calculator.calculatePlanForDay(testDay);
+		assertTrue(planForDay.size() > 0);
+		userDrugPlanRepository.deleteByUserBetweenDates(currentUser.getId(), DateUtils.asDateStartOfDay(testDay),
+				DateUtils.asDateEndOfDay(testDay));
+		userDrugPlanRepository.save(planForDay);
 	}
-	
-	
 }

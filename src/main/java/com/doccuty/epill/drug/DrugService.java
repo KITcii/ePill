@@ -6,9 +6,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import com.doccuty.epill.userdrugplan.UserDrugPlan;
-import com.doccuty.epill.userdrugplan.UserDrugPlanCalculator;
-import com.doccuty.epill.userdrugplan.UserDrugPlanRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +19,10 @@ import com.doccuty.epill.tailoredtext.TailoredText;
 import com.doccuty.epill.tailoredtext.TailoredTextService;
 import com.doccuty.epill.user.User;
 import com.doccuty.epill.user.UserService;
+import com.doccuty.epill.userdrugplan.DateUtils;
+import com.doccuty.epill.userdrugplan.UserDrugPlan;
+import com.doccuty.epill.userdrugplan.UserDrugPlanCalculator;
+import com.doccuty.epill.userdrugplan.UserDrugPlanRepository;
 
 @Service
 public class DrugService {
@@ -31,8 +32,7 @@ public class DrugService {
 	private static final String PROPERTY_DRUG_TAKING = "taking";
 
 	private static final String PROPERTY_DRUG_REMEMBER = "remember";
-	
-	
+
 	@Autowired
 	DrugRepository repository;
 
@@ -44,206 +44,201 @@ public class DrugService {
 
 	@Autowired
 	UserDrugPlanRepository userDrugPlanRepository;
-	
+
 	@Autowired
 	DrugFeatureRepository featureRepository;
-	
+
 	@Autowired
 	TailoredTextService tailoringService;
-	
-	
-	
-    public List<Drug> findAllDrugs() {
-    		List<Drug> drugs = repository.findAllOrderByName();
-    		
-    		if(!userService.isAnonymous()) {
-    			User user = userService.getUserById(userService.getCurrentUser().getId());
 
-    			if(user == null)
-    				return drugs;
-    			
-    			List<Drug> taking	= repository.findUserDrugsTaking(user.getId());
-    	    		List<Drug> remember	= repository.findUserDrugsRemembered(user.getId());
-    			
-    	    		for(Drug drug : drugs) {
-    	    			if(taking.contains(drug))
-    	    				drug.setIsTaken(true);
+	public List<Drug> findAllDrugs() {
+		final List<Drug> drugs = repository.findAllOrderByName();
 
-    	    			if(remember.contains(drug))
-    	    				drug.setIsRemembered(true);
+		if (!userService.isAnonymous()) {
+			final User user = userService.getUserById(userService.getCurrentUser().getId());
 
-    	    			drug = tailoringService.tailorDrugToUser(drug, user);
-    	    			
-    	    			// load tailored summary
-    	    			TailoredText summary = tailoringService.getTailoredMinimumSummaryByDrugAndUser(drug, user);
+			if (user == null)
+				return drugs;
 
-    	    			if(summary != null) {
-    	    				drug.setTailoredSummary(summary.getText());
-    	    			}
-    	    		}
-    		}
-    		
-    		LOG.info("Found {} drugs.", drugs.size());
-    		
-    		return drugs;
-    }
+			final List<Drug> taking = repository.findUserDrugsTaking(user.getId());
+			final List<Drug> remember = repository.findUserDrugsRemembered(user.getId());
+
+			for (Drug drug : drugs) {
+				if (taking.contains(drug))
+					drug.setIsTaken(true);
+
+				if (remember.contains(drug))
+					drug.setIsRemembered(true);
+
+				drug = tailoringService.tailorDrugToUser(drug, user);
+
+				// load tailored summary
+				final TailoredText summary = tailoringService.getTailoredMinimumSummaryByDrugAndUser(drug, user);
+
+				if (summary != null) {
+					drug.setTailoredSummary(summary.getText());
+				}
+			}
+		}
+
+		LOG.info("Found {} drugs.", drugs.size());
+
+		return drugs;
+	}
 
 	public Drug saveDrug(Drug drug) {
 
 		LOG.info("Saved drug={}", drug);
-		
-    		return repository.save(drug);
-    }
+
+		return repository.save(drug);
+	}
 
 	public Drug findDrugById(long id) {
-		
+
 		Drug drug = repository.findOne(id);
 
-		
-		if(drug != null && !userService.isAnonymous()) {
+		if (drug != null && !userService.isAnonymous()) {
 
 			// save invocation of the drug
-			
+
 			User user = userService.getCurrentUser();
-			
-			ItemInvocation invocation = new ItemInvocation();
+
+			final ItemInvocation invocation = new ItemInvocation();
 			invocation.withDrug(drug).withUser(user);
-			
+
 			user = userService.saveItemInvocation(invocation);
 
 			// check if drug is already in remember or taking list
-			for(User usr : drug.getUserRemembering()) {
-				if(usr.getId() == user.getId()) {
+			for (final User usr : drug.getUserRemembering()) {
+				if (usr.getId() == user.getId()) {
 					drug.setIsRemembered(true);
 					break;
 				}
 			}
-			
-			for(User usr : drug.getUser()) {
-				if(usr.getId() == user.getId()) {
+
+			for (final User usr : drug.getUser()) {
+				if (usr.getId() == user.getId()) {
 					drug.setIsTaken(true);
 					break;
 				}
 			}
-			
+
 			// tailor drug information to user characteristics
 			drug = this.tailoringService.tailorDrugToUser(drug, user);
 		}
 
 		return drug;
 	}
-	
+
 	public List<Drug> findDrugByName(String exp) {
-		List<Drug> list = repository.findByNameContainingIgnoreCase(exp);
+		final List<Drug> list = repository.findByNameContainingIgnoreCase(exp);
 		return list;
 	}
-	
+
 	public List<Drug> getDrugMinimized(String value) {
 		return repository.findByNameMinimized(value);
 	}
-	
+
 	public List<DrugFeature> findAllDrugFeaturesSimple() {
 		return featureRepository.findAllSimple();
 	}
 
-	
 	/**
-	 * check 
+	 * check
+	 * 
 	 * @return
 	 */
-	
+
 	public String checkUserDrugsInteractions(String listname) {
 
-		StringBuilder interactionText = new StringBuilder();
-		
+		final StringBuilder interactionText = new StringBuilder();
+
 		List<Drug> list = null;
-		
-		if(listname.equals(DrugService.PROPERTY_DRUG_TAKING)) {
+
+		if (listname.equals(DrugService.PROPERTY_DRUG_TAKING)) {
 			list = repository.findUserDrugsTaking(userService.getCurrentUser().getId());
-		} else if(listname.equals(DrugService.PROPERTY_DRUG_REMEMBER)) {
+		} else if (listname.equals(DrugService.PROPERTY_DRUG_REMEMBER)) {
 			list = repository.findUserDrugsRemembered(userService.getCurrentUser().getId());
 		} else {
 			list = new ArrayList<Drug>();
 		}
-		
-		for(Drug drug : list) {
-			for(Interaction interaction : drug.getInteraction()) {
-				for(Drug drugCompare : list) {
-					if(interaction.getInteractionDrug().contains(drugCompare)) {
-						interactionText.append("<p>"+drug.getName()+"</p> - "+drugCompare.getName()+": "+interaction.getInteraction()+"</p>");
+
+		for (final Drug drug : list) {
+			for (final Interaction interaction : drug.getInteraction()) {
+				for (final Drug drugCompare : list) {
+					if (interaction.getInteractionDrug().contains(drugCompare)) {
+						interactionText.append("<p>" + drug.getName() + "</p> - " + drugCompare.getName() + ": "
+								+ interaction.getInteraction() + "</p>");
 					}
 				}
 			}
 		}
-		
+
 		return interactionText.toString();
 	}
 
 	public List<Drug> findUserDrugsTaking(User user) {
-		
+
 		user = userService.getUserById(user.getId());
-		
-		List<Drug> drugs = repository.findUserDrugsTaking(user.getId());		
-		List<Drug> remembered = repository.findUserDrugsRemembered(user.getId());
-		
-		for(Drug drug : drugs) {
+
+		final List<Drug> drugs = repository.findUserDrugsTaking(user.getId());
+		final List<Drug> remembered = repository.findUserDrugsRemembered(user.getId());
+
+		for (Drug drug : drugs) {
 			drug.setIsTaken(true);
-			
-			if(remembered.contains(drug)) {
+
+			if (remembered.contains(drug)) {
 				drug.setIsRemembered(true);
 			}
 
 			drug = this.tailoringService.tailorDrugToUser(drug, user);
 		}
-		
+
 		return drugs;
 	}
-	
+
 	public List<Drug> findUserDrugsRemembered(User user) {
 
 		user = userService.getUserById(user.getId());
-		
-		List<Drug> taking = repository.findUserDrugsTaking(user.getId());		
-		List<Drug> drugs = repository.findUserDrugsRemembered(user.getId());
-		
-		for(Drug drug : drugs) {
+
+		final List<Drug> taking = repository.findUserDrugsTaking(user.getId());
+		final List<Drug> drugs = repository.findUserDrugsRemembered(user.getId());
+
+		for (Drug drug : drugs) {
 			drug.setIsRemembered(true);
-			
-			if(taking.contains(drug)) {
+
+			if (taking.contains(drug)) {
 				drug.setIsTaken(true);
 			}
 
 			drug = tailoringService.tailorDrugToUser(drug, user);
 		}
-		
+
 		return drugs;
 	}
 
-	
 	public List<ItemInvocation> getClicksByUserId() {
-		
-		List<ItemInvocation> list = invocationRepository.findInvocedDrugs(userService.getCurrentUser());
+
+		final List<ItemInvocation> list = invocationRepository.findInvocedDrugs(userService.getCurrentUser());
 		LOG.info("Retreived last visited items={}", list);
-		
-		
+
 		// sort by Date
-		
+
 		Collections.sort(list, new Comparator<ItemInvocation>() {
-	        @Override
-	        public int compare(ItemInvocation invocation1, ItemInvocation invocation2)
-	        {
+			@Override
+			public int compare(ItemInvocation invocation1, ItemInvocation invocation2) {
 
-	        		if(invocation1.getCounter() == invocation2.getCounter())
-	        			return  invocation1.getTimestamp().compareTo(invocation2.getTimestamp());
-	        		
-	        		if(invocation1.getCounter() < invocation2.getCounter())
-	        			return 1;
-	        		
-	        		return -1;
-	        }
-	    });
+				if (invocation1.getCounter() == invocation2.getCounter())
+					return invocation1.getTimestamp().compareTo(invocation2.getTimestamp());
 
-		if(list.size() > 6)
+				if (invocation1.getCounter() < invocation2.getCounter())
+					return 1;
+
+				return -1;
+			}
+		});
+
+		if (list.size() > 6)
 			return list.subList(0, 6);
 
 		return list;
@@ -259,19 +254,40 @@ public class DrugService {
 	public List<UserDrugPlan> getUserDrugPlansByUserIdAndDate(Date dateFrom, Date dateTo) {
 
 		final Long userId = userService.getCurrentUser().getId();
-		final List<UserDrugPlan> userDrugPlans = userDrugPlanRepository.findByUserBetweenDates(userId, dateFrom, dateTo);
+		final List<UserDrugPlan> userDrugPlans = userDrugPlanRepository.findByUserBetweenDates(userId, dateFrom,
+				dateTo);
 		LOG.info("found items={} in UserDrugPlan", userDrugPlans.size());
 		return userDrugPlans;
 	}
 
 	/**
-	 * recalculate drug plan at day for logged in user 
+	 * recalculate drug plan at day for logged in user
+	 * 
 	 * @param date
+	 * @return
 	 */
-	public boolean recalculateUserDrugPlan(Date date) {
-		LOG.info("recalculate drug plan");
+	public List<UserDrugPlan> recalculateAndSaveUserDrugPlanForDay(Date day) {
+		LOG.info("calculate drug plan for day {}", day);
+		final User currentUser = userService.findUserById(userService.getCurrentUser().getId());
+		final UserDrugPlanCalculator calculator = new UserDrugPlanCalculator(currentUser,
+				this.findUserDrugsTaking(currentUser));
+		final List<UserDrugPlan> plannedItemsForDay = calculator.calculatePlanForDay(day);
+		logDrugPlanItems("planed drugs for day", plannedItemsForDay);
+		LOG.info("plan for day calculated with {} items", plannedItemsForDay.size());
+		// delete current plan (if existing) and save new plan for day
+		userDrugPlanRepository.deleteByUserBetweenDates(currentUser.getId(), DateUtils.asDateStartOfDay(day),
+				DateUtils.asDateEndOfDay(day));
+		LOG.info("old plan deleted for day {}", day);
+		LOG.info("saving plan for day for calculated {} items", plannedItemsForDay.size());
+		final List<UserDrugPlan> savedItems = userDrugPlanRepository.save(plannedItemsForDay);
+		logDrugPlanItems("saved drug plan", savedItems);
+		return savedItems;
+	}
 
-		UserDrugPlanCalculator calculator = new UserDrugPlanCalculator(userService.getCurrentUser());
-		return calculator.calculatePlanForDay(date);
+	private void logDrugPlanItems(String message, List<UserDrugPlan> items) {
+		for (final UserDrugPlan item : items) {
+			LOG.info("{}: drug {}: {}", message, item.getDrug().getName(), item.getDatetimeIntakePlanned());
+		}
+
 	}
 }

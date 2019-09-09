@@ -177,12 +177,6 @@ INSERT INTO active_substance (id, name, idsubstance_group) VALUES (9,'Galantamin
 INSERT INTO active_substance (id, name, idsubstance_group) VALUES (10,'Quinaprilhydrochlorid',NULL);
 INSERT INTO active_substance (id, name, idsubstance_group) VALUES (11,'Acetylsalicylic acid',NULL);
 
---
--- Dumping data for table `user_drug_taking`
---
-INSERT INTO user_drug_taking (iduser, iddrug) VALUES (2, 1);
-INSERT INTO user_drug_taking (iduser, iddrug) VALUES (2, 2);
-
 
 --
 -- Dumping data for table `product_group`
@@ -633,3 +627,11 @@ INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(15, 1,
 INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(16, 2, 2, '2019-09-02 13:00:00');
 INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(17, 1, 2, '2019-09-02 09:00:00');
 INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(18, 2, 2, '2019-09-02 13:00:00');
+
+--
+-- Dumping data for table `user_drug_taking`
+--
+INSERT INTO user_drug_taking (iduser, iddrug) VALUES (2, 1);
+INSERT INTO user_drug_taking (iduser, iddrug) VALUES (2, 2);
+INSERT INTO user_drug_taking (iduser, iddrug) VALUES (2, 3);
+

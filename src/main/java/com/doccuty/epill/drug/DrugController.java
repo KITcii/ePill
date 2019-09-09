@@ -4,12 +4,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
-import com.doccuty.epill.model.util.UserDrugPlanCreator;
-import com.doccuty.epill.userdrugplan.UserDrugPlan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.json.JsonParser;
+import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,10 @@ import com.doccuty.epill.iteminvocation.ItemInvocation;
 import com.doccuty.epill.model.DrugFeature;
 import com.doccuty.epill.model.util.DrugCreator;
 import com.doccuty.epill.model.util.ItemInvocationCreator;
+import com.doccuty.epill.model.util.UserDrugPlanCreator;
 import com.doccuty.epill.user.UserService;
+import com.doccuty.epill.userdrugplan.DateUtils;
+import com.doccuty.epill.userdrugplan.UserDrugPlan;
 
 import de.uniks.networkparser.Deep;
 import de.uniks.networkparser.Filter;
@@ -32,77 +36,77 @@ import de.uniks.networkparser.IdMap;
 import de.uniks.networkparser.json.JsonArray;
 import de.uniks.networkparser.json.JsonObject;
 
-
 @RestController
 @RequestMapping("/drug")
 public class DrugController {
-	
+
 	private static final Logger LOG = LoggerFactory.getLogger(DrugController.class);
 
-    @Autowired
-    private DrugService service;
-    
-    @Autowired
-    private UserService userService;
-    
-    
-    /**
-     * get a drug by id
-     * @param id
-     * @param lang
-     * @return
-     */
-    
-    @RequestMapping(value={"{id}/{lang}"}, method = RequestMethod.GET)
-    public ResponseEntity<JsonObject> getDrugById(@PathVariable(value = "id") long id, @PathVariable(value = "lang") String lang) {
+	@Autowired
+	private DrugService service;
 
-	    Drug drug = service.findDrugById(id);
-	    
-	    // generate JSON formatted string
-	    	IdMap map = DrugCreator.createIdMap("");
+	@Autowired
+	private UserService userService;
+
+	/**
+	 * get a drug by id
+	 * 
+	 * @param id
+	 * @param lang
+	 * @return
+	 */
+
+	@RequestMapping(value = { "{id}/{lang}" }, method = RequestMethod.GET)
+	public ResponseEntity<JsonObject> getDrugById(@PathVariable(value = "id") long id,
+			@PathVariable(value = "lang") String lang) {
+
+		final Drug drug = service.findDrugById(id);
+
+		// generate JSON formatted string
+		final IdMap map = DrugCreator.createIdMap("");
 		map.withFilter(Filter.regard(Deep.create(4)));
-			
-	    	JsonObject json = map.toJsonObject(drug);   	
-	    	
-		return new ResponseEntity<>(json, HttpStatus.OK);
-    }
-    
-    /**
-     * Get full list of all drugs in the system
-     * @return
-     */
-    
-    @RequestMapping(value = "/list/all", method = RequestMethod.GET)
-    public ResponseEntity<JsonObject> getAllDrugs() {
 
-	    List<Drug> set = service.findAllDrugs();
-	    
-	    
-	    // generate JSON formatted string
-	    	IdMap map = DrugCreator.createIdMap("");
+		final JsonObject json = map.toJsonObject(drug);
+
+		return new ResponseEntity<>(json, HttpStatus.OK);
+	}
+
+	/**
+	 * Get full list of all drugs in the system
+	 * 
+	 * @return
+	 */
+
+	@RequestMapping(value = "/list/all", method = RequestMethod.GET)
+	public ResponseEntity<JsonObject> getAllDrugs() {
+
+		final List<Drug> set = service.findAllDrugs();
+
+		// generate JSON formatted string
+		final IdMap map = DrugCreator.createIdMap("");
 		map.withFilter(Filter.regard(Deep.create(2)));
-			
-	    	JsonObject json = new JsonObject();
-	    	JsonArray drugArray = new JsonArray();
-	    	
-	    	for(Drug drug : set) {
-	    		drugArray.add(map.toJsonObject(drug));
-	    	}
-    	
+
+		final JsonObject json = new JsonObject();
+		final JsonArray drugArray = new JsonArray();
+
+		for (final Drug drug : set) {
+			drugArray.add(map.toJsonObject(drug));
+		}
+
 		json.add("value", drugArray);
 
 		return new ResponseEntity<>(json, HttpStatus.OK);
-    }
-    
-    
-    /**
-     * save a new drug
-     * @param drug
-     * @return
-     */
-    
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public ResponseEntity<Object> addDrug(@RequestBody Drug drug) {
+	}
+
+	/**
+	 * save a new drug
+	 * 
+	 * @param drug
+	 * @return
+	 */
+
+	@RequestMapping(value = "/save", method = RequestMethod.POST)
+	public ResponseEntity<Object> addDrug(@RequestBody Drug drug) {
 		// A pragmatic approach to security which does not use much
 		// framework-specific magic. While other approaches
 		// with annotations, etc. are possible they are much more complex while
@@ -111,83 +115,80 @@ public class DrugController {
 		if (userService.isAnonymous()) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
-		
-    		service.saveDrug(drug);
 
-    		LOG.info("New drug saved drug={}", drug);
-    		
+		service.saveDrug(drug);
+
+		LOG.info("New drug saved drug={}", drug);
+
 		return new ResponseEntity<>(HttpStatus.OK);
-    }
+	}
 
-    
-    /**
-     * Search database for drugs matching the sent expression
-     * This is used for autocompletion
-     * @param exp
-     * @return
-     */
-    
-    @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public ResponseEntity<JsonObject> searchDrug(@RequestParam("exp") String exp) {
+	/**
+	 * Search database for drugs matching the sent expression This is used for
+	 * autocompletion
+	 * 
+	 * @param exp
+	 * @return
+	 */
 
-    		List<Drug> list = service.findDrugByName(exp);
-    	    
-    	    
-    	    // generate JSON formatted string
-    	    
-		IdMap map = DrugCreator.createIdMap("");
-		map.withFilter(Filter.regard(Deep.create(2)));
-		
-	    	JsonObject json = new JsonObject();
-	    	JsonArray drugArray = new JsonArray();
-	    	
-	    	for(Drug drug : list) {
-	    		drugArray.add(map.toJsonObject(drug));
-	    	}
-	    	
-		json.add("value", drugArray);
-		
-		return new ResponseEntity<>(json, HttpStatus.OK);
-    }
-    
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	public ResponseEntity<JsonObject> searchDrug(@RequestParam("exp") String exp) {
 
-    /**
-     * get all drug features
-     * @return
-     */
-    
-    @RequestMapping(value = "/feature/all", method = RequestMethod.GET)
-    public ResponseEntity<JsonObject> findAllDrugFeaturesSimple() {
-    	
-	    	List<DrugFeature> list = service.findAllDrugFeaturesSimple();
-		    
-		    
+		final List<Drug> list = service.findDrugByName(exp);
+
 		// generate JSON formatted string
-		    
-		IdMap map = DrugCreator.createIdMap("");
+
+		final IdMap map = DrugCreator.createIdMap("");
+		map.withFilter(Filter.regard(Deep.create(2)));
+
+		final JsonObject json = new JsonObject();
+		final JsonArray drugArray = new JsonArray();
+
+		for (final Drug drug : list) {
+			drugArray.add(map.toJsonObject(drug));
+		}
+
+		json.add("value", drugArray);
+
+		return new ResponseEntity<>(json, HttpStatus.OK);
+	}
+
+	/**
+	 * get all drug features
+	 * 
+	 * @return
+	 */
+
+	@RequestMapping(value = "/feature/all", method = RequestMethod.GET)
+	public ResponseEntity<JsonObject> findAllDrugFeaturesSimple() {
+
+		final List<DrugFeature> list = service.findAllDrugFeaturesSimple();
+
+		// generate JSON formatted string
+
+		final IdMap map = DrugCreator.createIdMap("");
 		map.withFilter(Filter.regard(Deep.create(1)));
 
-	    	JsonObject json = new JsonObject();
-	    	JsonArray drugArray = new JsonArray();
-	    	
-	    	for(DrugFeature feature : list) {
-	    		drugArray.add(map.toJsonObject(feature));
-	    	}
-    	
+		final JsonObject json = new JsonObject();
+		final JsonArray drugArray = new JsonArray();
+
+		for (final DrugFeature feature : list) {
+			drugArray.add(map.toJsonObject(feature));
+		}
+
 		json.add("value", drugArray);
 
 		return new ResponseEntity<>(json, HttpStatus.OK);
-    }
-    
-    
-    
-    /**
-     * check a collection of drugs for interactions
-     * @return
-     */
+	}
 
-    @RequestMapping(value = "/interactions/{listname}", method = RequestMethod.GET)
-    public ResponseEntity<JsonObject> checkForAdverseEffects(@PathVariable(value = "listname") String listname) {
+	/**
+	 * check a collection of drugs for interactions
+	 * 
+	 * @return
+	 */
+
+	@RequestMapping(value = "/interactions/{listname}", method = RequestMethod.GET)
+	public ResponseEntity<JsonObject> checkForAdverseEffects(@PathVariable(value = "listname") String listname) {
 		// A pragmatic approach to security which does not use much
 		// framework-specific magic. While other approaches
 		// with annotations, etc. are possible they are much more complex while
@@ -196,27 +197,26 @@ public class DrugController {
 
 		if (userService.isAnonymous()) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		}  
-		
-		IdMap map = DrugCreator.createIdMap("");
+		}
+
+		final IdMap map = DrugCreator.createIdMap("");
 		map.withFilter(Filter.regard(Deep.create(1)));
 
-		JsonObject json = new JsonObject();
+		final JsonObject json = new JsonObject();
 		json.add("value", service.checkUserDrugsInteractions(listname));
 
 		return new ResponseEntity<>(json, HttpStatus.OK);
-    }
-    
-    
-    
-    /**
-     * retrieve drugs a user has marked as frequently taking
-     * @return
-     */
+	}
 
-    @RequestMapping(value = "/list/taking", method = RequestMethod.GET)
-    public ResponseEntity<JsonObject> getTakenDrugByUser() {
-    	
+	/**
+	 * retrieve drugs a user has marked as frequently taking
+	 * 
+	 * @return
+	 */
+
+	@RequestMapping(value = "/list/taking", method = RequestMethod.GET)
+	public ResponseEntity<JsonObject> getTakenDrugByUser() {
+
 		// A pragmatic approach to security which does not use much
 		// framework-specific magic. While other approaches
 		// with annotations, etc. are possible they are much more complex while
@@ -225,33 +225,34 @@ public class DrugController {
 
 		if (userService.isAnonymous()) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		}  
+		}
 
-        List<Drug> set = service.findUserDrugsTaking(userService.getCurrentUser());
-    	
-		IdMap map = DrugCreator.createIdMap("");
+		final List<Drug> set = service.findUserDrugsTaking(userService.getCurrentUser());
+
+		final IdMap map = DrugCreator.createIdMap("");
 		map.withFilter(Filter.regard(Deep.create(2)));
-		
-	    	JsonObject json = new JsonObject();
-	    	JsonArray drugArray = new JsonArray();
-	    	
-	    	for(Drug drug : set) {
-	    		drugArray.add(map.toJsonObject(drug));
-	    	}
-    	
+
+		final JsonObject json = new JsonObject();
+		final JsonArray drugArray = new JsonArray();
+
+		for (final Drug drug : set) {
+			drugArray.add(map.toJsonObject(drug));
+		}
+
 		json.add("value", drugArray);
 
 		return new ResponseEntity<>(json, HttpStatus.OK);
-    }
-    
-    /**
-     * handling drugs a user is frequently taking
-     * @param drug
-     * @return
-     */
-    
-    @RequestMapping(value = "/taking/add", method = RequestMethod.POST)
-    public ResponseEntity<Object> addDrugToUserFavorites(@RequestBody Drug drug) {
+	}
+
+	/**
+	 * handling drugs a user is frequently taking
+	 * 
+	 * @param drug
+	 * @return
+	 */
+
+	@RequestMapping(value = "/taking/add", method = RequestMethod.POST)
+	public ResponseEntity<Object> addDrugToUserFavorites(@RequestBody Drug drug) {
 
 		// A pragmatic approach to security which does not use much
 		// framework-specific magic. While other approaches
@@ -261,16 +262,16 @@ public class DrugController {
 		if (userService.isAnonymous()) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
-		
-		if(userService.addDrugToUserTakingList(drug)) {
+
+		if (userService.addDrugToUserTakingList(drug)) {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
-		
+
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }
-    
-    @RequestMapping(value = "/taking/remove", method = RequestMethod.POST)
-    public ResponseEntity<Object> removeDrugToUserFavorites(@RequestBody Drug drug) {
+	}
+
+	@RequestMapping(value = "/taking/remove", method = RequestMethod.POST)
+	public ResponseEntity<Object> removeDrugToUserFavorites(@RequestBody Drug drug) {
 
 		// A pragmatic approach to security which does not use much
 		// framework-specific magic. While other approaches
@@ -280,24 +281,23 @@ public class DrugController {
 		if (userService.isAnonymous()) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
-		
-		if(userService.removeDrugFromUserTakingList(drug)) {
+
+		if (userService.removeDrugFromUserTakingList(drug)) {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
-		
+
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }
+	}
 
-    
-    
-    /**
-     * retrieve drugs a user has marked as frequently taking
-     * @return
-     */
+	/**
+	 * retrieve drugs a user has marked as frequently taking
+	 * 
+	 * @return
+	 */
 
-    @RequestMapping(value = "/list/remember", method = RequestMethod.GET)
-    public ResponseEntity<JsonObject> getUserDrugsRemembered() {
-    	
+	@RequestMapping(value = "/list/remember", method = RequestMethod.GET)
+	public ResponseEntity<JsonObject> getUserDrugsRemembered() {
+
 		// A pragmatic approach to security which does not use much
 		// framework-specific magic. While other approaches
 		// with annotations, etc. are possible they are much more complex while
@@ -306,33 +306,34 @@ public class DrugController {
 
 		if (userService.isAnonymous()) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		}  
-		
-        List<Drug> list = service.findUserDrugsRemembered(userService.getCurrentUser());
+		}
 
-		IdMap map = DrugCreator.createIdMap("");
+		final List<Drug> list = service.findUserDrugsRemembered(userService.getCurrentUser());
+
+		final IdMap map = DrugCreator.createIdMap("");
 		map.withFilter(Filter.regard(Deep.create(2)));
-		
-	    	JsonObject json = new JsonObject();
-	    	JsonArray drugArray = new JsonArray();
-	    	
-	    	for(Drug drug : list) {
-	    		drugArray.add(map.toJsonObject(drug));
-	    	}
-    	
+
+		final JsonObject json = new JsonObject();
+		final JsonArray drugArray = new JsonArray();
+
+		for (final Drug drug : list) {
+			drugArray.add(map.toJsonObject(drug));
+		}
+
 		json.add("value", drugArray);
 
 		return new ResponseEntity<>(json, HttpStatus.OK);
-    }
-    
-    /**
-     * handling drugs a user is frequently taking
-     * @param drug
-     * @return
-     */
-    
-    @RequestMapping(value = "/remember/add", method = RequestMethod.POST)
-    public ResponseEntity<Object> addDrugToRememberList(@RequestBody Drug drug) {
+	}
+
+	/**
+	 * handling drugs a user is frequently taking
+	 * 
+	 * @param drug
+	 * @return
+	 */
+
+	@RequestMapping(value = "/remember/add", method = RequestMethod.POST)
+	public ResponseEntity<Object> addDrugToRememberList(@RequestBody Drug drug) {
 
 		// A pragmatic approach to security which does not use much
 		// framework-specific magic. While other approaches
@@ -342,16 +343,16 @@ public class DrugController {
 		if (userService.isAnonymous()) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
-		
-		if(userService.addDrugToUserRememberList(drug)) {
+
+		if (userService.addDrugToUserRememberList(drug)) {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
-		
+
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }
-    
-    @RequestMapping(value = "/remember/remove", method = RequestMethod.POST)
-    public ResponseEntity<Object> removeDrugFromRememberList(@RequestBody Drug drug) {
+	}
+
+	@RequestMapping(value = "/remember/remove", method = RequestMethod.POST)
+	public ResponseEntity<Object> removeDrugFromRememberList(@RequestBody Drug drug) {
 
 		// A pragmatic approach to security which does not use much
 		// framework-specific magic. While other approaches
@@ -361,23 +362,22 @@ public class DrugController {
 		if (userService.isAnonymous()) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
-		
-		if(userService.removeDrugFromUserRememberList(drug)) {
+
+		if (userService.removeDrugFromUserRememberList(drug)) {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
-		
+
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }
-    
-    
-    
-    /**
-     * get frequently visited items by current user
-     * @return
-     */
-    
-    @RequestMapping(value={"/frequentlyVisited"}, method = RequestMethod.GET)
-    public ResponseEntity<JsonArray> getFrequentlyVisited() {
+	}
+
+	/**
+	 * get frequently visited items by current user
+	 * 
+	 * @return
+	 */
+
+	@RequestMapping(value = { "/frequentlyVisited" }, method = RequestMethod.GET)
+	public ResponseEntity<JsonArray> getFrequentlyVisited() {
 
 		// A pragmatic approach to security which does not use much
 		// framework-specific magic. While other approaches
@@ -387,22 +387,22 @@ public class DrugController {
 		if (userService.isAnonymous()) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
-		
-		List<ItemInvocation> list = service.getClicksByUserId();
 
-		IdMap map = ItemInvocationCreator.createIdMap("");
+		final List<ItemInvocation> list = service.getClicksByUserId();
+
+		final IdMap map = ItemInvocationCreator.createIdMap("");
 		map.withFilter(Filter.regard(Deep.create(2)));
-		
-	    	JsonArray json = new JsonArray();
-	    	
-	    	for(ItemInvocation invocation : list) {
-	    		json.add(map.toJsonObject(invocation));
-	    	}
-	    	
-	    	return new ResponseEntity<>(json, HttpStatus.OK);
-    }
 
-    /**
+		final JsonArray json = new JsonArray();
+
+		for (final ItemInvocation invocation : list) {
+			json.add(map.toJsonObject(invocation));
+		}
+
+		return new ResponseEntity<>(json, HttpStatus.OK);
+	}
+
+	/**
 	 * get all planned drugs for user
 	 *
 	 * @return
@@ -455,8 +455,8 @@ public class DrugController {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 
-		final Date nextDay = new Date(day.getTime() + (24 * 60 * 60 * 1000));
-		final List<UserDrugPlan> userDrugPlanList = service.getUserDrugPlansByUserIdAndDate(day, nextDay);
+		final List<UserDrugPlan> userDrugPlanList = service
+				.getUserDrugPlansByUserIdAndDate(DateUtils.asDateStartOfDay(day), DateUtils.asDateEndOfDay(day));
 		LOG.info("getUserDrugsPlanned, count of drugs={}", userDrugPlanList.size());
 		final IdMap map = UserDrugPlanCreator.createIdMap("");
 		map.withFilter(Filter.regard(Deep.create(2)));
@@ -474,43 +474,44 @@ public class DrugController {
 
 	}
 
-	 //@RequestMapping(value = "/userdrugplanned/calculate/date", method = RequestMethod.POST)
-	 //   public ResponseEntity<Object> recalculateDrugPlan(@RequestBody @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date) {
-	 /**
-     * recalculate drug plan at day for logged in user 
-     *  
-     * @param date
-     * @return
-     */
-    @RequestMapping(value = "/userdrugplanned/calculate/date", method = RequestMethod.POST)
-    public ResponseEntity<Object> recalculateDrugPlan(@RequestBody String dateString) {
+	/**
+	 * recalculate drug plan at day for logged in user
+	 * 
+	 * @param date
+	 * @return
+	 */
+	@RequestMapping(value = "/userdrugplanned/calculate/date", method = RequestMethod.POST)
+	public ResponseEntity<Object> recalculateDrugPlan(@RequestBody String dateString) {
 		// A pragmatic approach to security which does not use much
 		// framework-specific magic. While other approaches
 		// with annotations, etc. are possible they are much more complex while
 		// this is quite easy to understand and
 		// extend.
-   		LOG.info("recalculating user drug plan for day {}", dateString);
+		LOG.info("recalculating user drug plan for day {}", dateString);
 		if (userService.isAnonymous()) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
-		
-   		service.recalculateUserDrugPlan(parseDateString(dateString));
 
-   		LOG.info("user drug plan recalculated");
-    		
+		service.recalculateAndSaveUserDrugPlanForDay(parseDateString(dateString));
+
+		LOG.info("user drug plan recalculated");
+
 		return new ResponseEntity<>(HttpStatus.OK);
-    }
+	}
 
-	private Date parseDateString(String dateString) {
-		SimpleDateFormat formatter = new SimpleDateFormat("DD.MM.YYYY");
+	private Date parseDateString(String jsonDate) {
+		final JsonParser springParser = JsonParserFactory.getJsonParser();
+		final Map<String, Object> jsonMap = springParser.parseMap(jsonDate);
+		final Object obj = jsonMap.get("date");
+		final SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
 		try {
-
-			Date date = formatter.parse(dateString);
+			final String dateString = (String) obj;
+			final Date date = formatter.parse(dateString);
 			LOG.info("converted date {}", date);
 			return date;
-		} catch (ParseException e) {
+		} catch (final ParseException e) {
 			return new Date();
 		}
 	}
-	
+
 }

@@ -17,7 +17,7 @@ class MedicationPlan extends React.Component {
             drugsplanned: [],
             date : new Date()
         };
-        
+
     }
 
     // This function is called before render() to initialize its state.
@@ -31,7 +31,7 @@ class MedicationPlan extends React.Component {
         this.setState(this.state);
         console.log("getting userdrugplanned");
         axios.get("/drug/list/userdrugplanned/date", {
-               		params: {
+                        params: {
                           date: this.state.date
                         }
                       }).then(({ data }) => {
@@ -45,72 +45,70 @@ class MedicationPlan extends React.Component {
     createMarkup(text) {
         return { __html: text };
     }
-    
+
     changeDate (incrementBy) {
         console.log("setDate");
         this.state.date.setTime(this.state.date.getTime() + incrementBy * 86400000);
         this.setState(this.state);
         this.getData();
     }
-    
+
     formatDate(datetime) {
-        var formatted_date = moment(datetime).format("hh:mm");
+        var formatted_date = moment(datetime).format("HH:mm");
         return formatted_date;
     }
-    
-    
+
+
     renderDrugsPlanned(drugsplanned) {   
         return drugsplanned.map(drugplanned => {
             return (
-            	    	<tr key={drugplanned.id} className="table-line-hover">
-	            	    	<td className="td-style">
-		                        <div className="progress">
-		                          <div className="progress-bar" style={{ width: "50%" }}></div>
-		                        </div>
-	                        </td>
-	                        <td className="td-style">
-	                        	<input type="checkbox" value=""></input>
-	                        </td>
-		                	<td className="td-style">{this.formatDate(drugplanned.datetime_intake_planned)}</td>
-		                    <td className="td-style">{drugplanned.drug.name} hours</td>
-		                </tr>           	
+                        <tr key={drugplanned.id} className="table-line-hover">
+                                <td className="td-style">
+                                        <div className="progress">
+                                          <div className="progress-bar" style={{ width: "50%" }}></div>
+                                        </div>
+                                </td>
+                                <td className="td-style">
+                                        <input type="checkbox" value=""></input>
+                                </td>
+                                        <td className="td-style">{this.formatDate(drugplanned.datetime_intake_planned)}</td>
+                                    <td className="td-style">{drugplanned.drug.name}</td>
+                                </tr>                   
             );
         });
     }
-    
+
     recalculatePlan() {
         console.log("recalculating user drug plan");
-	 	axios.post('/drug/userdrugplanned/calculate/date', { date: moment(this.state.date).format("DD.MM.YYYY")}, {
+                axios.post('/drug/userdrugplanned/calculate/date', { date: moment(this.state.date).format("DD.MM.YYYY")}, {
             validateStatus: (status) => {
+                console.log("status=" + status);
                 return (status >= 200 && status < 300) || status == 400 || status == 401
             }
- 		})
+                })
      .then(({data, status}) => {
+         console.log("status=" + status);
          const {t} = this.props;
-         const options = {
-         	    position: toast.POSITION.BOTTOM_CENTER
-         };
-         
+
          switch (status) {
              case 200:
-            	 	toast.success('drug plan recalculated', options);
-            	 this.getData();
+                 console.log("case status 200");
+                 this.getData();
                  break;
              case 400:
-              	toast.error('recalculation of drug plan failed', options);
                  break;
              case 401:
-             	console.log(data, "not permitted");
-                	break;
+                console.log(data, "not permitted");
+                        break;
          }
-     	});
+        });
     }
 
     render() {
         const { t } = this.props;
         const drugsplanned = this.state.drugsplanned;
         var formatted_date = moment(this.state.date).format("DD.MM.YYYY");
-        
+
         return (
             <div className="container no-banner">
                 <div className="page-header">
@@ -127,8 +125,8 @@ class MedicationPlan extends React.Component {
                             </button>
                             <button type="button" className="btn btn-sm btn-add btn-add-drug">{t("addDrugsToMedicationPlan")}</button>
                             <button type="button" className="btn btn-sm btn-recalculate" onClick={() => this.recalculatePlan()}>{t("recalculatePlan")}
-                            	<span className="glyphicon glyphicon-white glyphicon-refresh"></span>
-                        	</button>
+                                <span className="glyphicon glyphicon-white glyphicon-refresh"></span>
+                                </button>
                         </div>
                 </div>
                 <div>
@@ -145,18 +143,18 @@ class MedicationPlan extends React.Component {
                         )}
                         {!this.state.loading && drugsplanned && drugsplanned.length > 0 && (
                             <table id="drugsplanned" className="table-style">
-		                            <thead>
-			                            <th className="th-style">half-time-period</th>
-			                            <th className="th-style"></th>
-			                            <th className="th-style">time</th>
-			                            <th className="th-style">name</th>
-		                            </thead>
-		                            {this.renderDrugsPlanned(drugsplanned)}
+                                            <thead>
+                                                    <th className="th-style">half-time-period</th>
+                                                    <th className="th-style"></th>
+                                                    <th className="th-style">time</th>
+                                                    <th className="th-style">name</th>
+                                            </thead>
+                                            {this.renderDrugsPlanned(drugsplanned)}
                             </table>                           
                         )}
                     </div>
                 </div>
-                
+
             </div>
         );
     }
