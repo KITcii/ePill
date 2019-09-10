@@ -53,7 +53,16 @@ public class UserDrugPlanCalculatorTest {
 		assertNotNull("We should have an instance of drugService", drugService);
 		assertNotNull("We should have an instance of userService", userService);
 	}
-
+	
+	@Test
+	@Transactional
+	public void testCalculatePlan2() {
+		LOG.info("testing calculating plan");
+		final Date testDay = new Date();
+		final List<UserDrugPlan> planForDay = drugService.recalculateAndSaveUserDrugPlanForDay(testDay);
+		assertTrue(planForDay.size() > 0);
+	}
+	
 	@Test
 	@Transactional
 	public void testCalculatePlan() {

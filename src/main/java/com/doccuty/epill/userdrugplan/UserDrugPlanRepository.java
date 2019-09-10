@@ -33,7 +33,7 @@ public interface UserDrugPlanRepository extends JpaRepository<UserDrugPlan, Long
 	 * @param endDate
 	 * @return
 	 */
-	@Query("SELECT p FROM UserDrugPlan p WHERE p.user.id = :userid AND p.dateTimePlanned >= :startDate AND p.dateTimePlanned <= :endDate")
+	@Query("SELECT p FROM UserDrugPlan p WHERE p.user.id = :userid AND p.dateTimePlanned >= :startDate AND p.dateTimePlanned <= :endDate ORDER BY p.dateTimePlanned")
 	List<UserDrugPlan> findByUserBetweenDates(@Param("userid") long id, @Param("startDate") Date startDate,
 			@Param("endDate") Date endDate);
 

@@ -131,9 +131,9 @@ INSERT INTO image (id, filename, filetype, uploaded_at, image) VALUES (11,'Aspir
 -- Dumping data for table `drug_simple`
 --
 
-INSERT INTO drug_simple (id, name, number, status, version, year, idimage, period, take_on_empty_stomach, take_on_full_stomach, count_per_day) VALUES (1,'Accupro® 10 Filmtabletten',0,'3915-06-01','1.59', '2011-1-1', 2, 2, false, false, 1);
-INSERT INTO drug_simple (id, name, number, status, version, year, idimage, period, take_on_empty_stomach, take_on_full_stomach, count_per_day) VALUES (2,'Baymycard',0,'3915-06-01','1.59','2011-1-1', 3, 2, false, false, 1);
-INSERT INTO drug_simple (id, name, number, status, version, year, idimage, period, take_on_empty_stomach, take_on_full_stomach, count_per_day) VALUES (3,'Beloc-Zok® comp',6030,'3915-06-01','1.37','2011-1-1', 4, 4, false, false, 1);
+INSERT INTO drug_simple (id, name, number, status, version, year, idimage, period, take_on_empty_stomach, take_on_full_stomach, count_per_day) VALUES (1,'Accupro® 10 Filmtabletten',0,'3915-06-01','1.59', '2011-1-1', 2, 3, false, false, 1);
+INSERT INTO drug_simple (id, name, number, status, version, year, idimage, period, take_on_empty_stomach, take_on_full_stomach, count_per_day) VALUES (2,'Baymycard',0,'3915-06-01','1.59','2011-1-1', 3, 2, true, false, 2);
+INSERT INTO drug_simple (id, name, number, status, version, year, idimage, period, take_on_empty_stomach, take_on_full_stomach, count_per_day) VALUES (3,'Beloc-Zok® comp',6030,'3915-06-01','1.37','2011-1-1', 4, 4, false, false, 3);
 INSERT INTO drug_simple (id, name, number, status, version, year, idimage, period, take_on_empty_stomach, take_on_full_stomach, count_per_day) VALUES (4,'Cardura',0,'3915-06-01','1.59','2011-1-1', 5, 2, false, false, 1);
 INSERT INTO drug_simple (id, name, number, status, version, year, idimage, period, take_on_empty_stomach, take_on_full_stomach, count_per_day) VALUES (5,'Ciprobay',0,'3915-06-01','1.59','2011-1-1', 6, 4, false, false, 1);
 INSERT INTO drug_simple (id, name, number, status, version, year, idimage, period, take_on_empty_stomach, take_on_full_stomach, count_per_day) VALUES (6,'Clexane',0,'3915-06-01','1.59','2011-1-1', 7, 4, false, false, 1);
@@ -627,6 +627,24 @@ INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(15, 1,
 INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(16, 2, 2, '2019-09-02 13:00:00');
 INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(17, 1, 2, '2019-09-02 09:00:00');
 INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(18, 2, 2, '2019-09-02 13:00:00');
+
+INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(19, 2, 2, '2019-09-10 07:00:00');
+INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(20, 3, 2, '2019-09-10 07:00:00');
+INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(21, 3, 2, '2019-09-10 11:00:00');
+INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(22, 1, 2, '2019-09-10 15:00:00');
+INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(23, 2, 2, '2019-09-10 18:00:00');
+INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(24, 3, 2, '2019-09-10 18:00:00');
+
+INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(25, 2, 2, '2019-09-11 07:00:00');
+INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(26, 3, 2, '2019-09-11 07:00:00');
+INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(27, 1, 2, '2019-09-11 11:00:00');
+
+INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(28, 2, 2, '2019-09-12 07:00:00');
+INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(29, 3, 2, '2019-09-12 07:00:00');
+INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(30, 1, 2, '2019-09-12 11:00:00');
+INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(31, 1, 2, '2019-09-12 14:00:00');
+INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(32, 2, 2, '2019-09-12 18:00:00');
+INSERT INTO user_drug_plan (id, iddrug, iduser, date_time_planned) VALUES(33, 3, 2, '2019-09-12 18:00:00');
 
 --
 -- Dumping data for table `user_drug_taking`

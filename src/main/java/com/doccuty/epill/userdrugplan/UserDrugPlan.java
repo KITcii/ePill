@@ -1,14 +1,25 @@
 package com.doccuty.epill.userdrugplan;
 
-import com.doccuty.epill.drug.Drug;
-import com.doccuty.epill.user.User;
-import de.uniks.networkparser.interfaces.SendableEntity;
-import org.hibernate.annotations.CreationTimestamp;
-
-import javax.persistence.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Date;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import com.doccuty.epill.drug.Drug;
+import com.doccuty.epill.user.User;
+
+import de.uniks.networkparser.interfaces.SendableEntity;
 
 @Entity
 @Table(name="user_drug_plan")
@@ -58,9 +69,9 @@ public class UserDrugPlan implements SendableEntity {
     //Planned Timestamp for drug taking==========================================================================
     public static final String PROPERTY_DATETIME_INTAKE_PLANNED = "datetime_intake_planned";
 
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
-    private Date dateTimePlanned;
+    @Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false)
+	private Date dateTimePlanned;
 
     public Date getDatetimeIntakePlanned()
     {
