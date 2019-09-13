@@ -5,7 +5,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class DateUtils {
 
@@ -38,4 +40,19 @@ public class DateUtils {
 	public static LocalDateTime asLocalDateTime(Date date) {
 		return Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
 	}
+
+	public static Date setHoursOfDate(Date date, int hours) {
+		final Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.set(Calendar.HOUR_OF_DAY, hours);
+		final Date newDate = calendar.getTime();
+		return newDate;
+	}
+
+	public static int getHours(Date datetimeIntakePlanned) {
+		final Calendar calendar = GregorianCalendar.getInstance();
+		calendar.setTime(datetimeIntakePlanned);
+		return calendar.get(Calendar.HOUR_OF_DAY);
+	}
+
 }

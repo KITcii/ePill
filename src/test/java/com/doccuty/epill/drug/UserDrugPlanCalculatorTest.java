@@ -4,6 +4,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -53,7 +54,10 @@ public class UserDrugPlanCalculatorTest {
 		assertNotNull("We should have an instance of drugService", drugService);
 		assertNotNull("We should have an instance of userService", userService);
 	}
-	
+
+	/**
+	 * test drug service recalculation 
+	 */
 	@Test
 	@Transactional
 	public void testCalculatePlan2() {
@@ -62,13 +66,14 @@ public class UserDrugPlanCalculatorTest {
 		final List<UserDrugPlan> planForDay = drugService.recalculateAndSaveUserDrugPlanForDay(testDay);
 		assertTrue(planForDay.size() > 0);
 	}
-	
+
 	@Test
 	@Transactional
 	public void testCalculatePlan() {
 		LOG.info("testing calculating plan");
 
-		final Date testDay = new Date();
+		//test for 12.09.2019: 9 == 8!?
+		final Date testDay = new GregorianCalendar(2019, 8, 12).getTime();
 		final User currentUser = userService.findUserById(userService.getCurrentUser().getId());
 		final UserDrugPlanCalculator calculator = new UserDrugPlanCalculator(currentUser,
 				drugService.findUserDrugsTaking(currentUser));

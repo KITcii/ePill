@@ -29,6 +29,7 @@ public class UserDrugPlanCalculator {
                 List<UserDrugPlan> userDrugPlanForDay = new ArrayList<>();
                 LOG.info("breakfast={}, lunch={}, dinner={}", this.user.getBreakfastTime(), this.user.getLunchTime(),
                                 this.user.getDinnerTime());
+                //TODO: emptyStomach, 
                 for (final Drug drug : userDrugsTaking) {
                         LOG.info("drug taking {}, ", drug.getName());
                         userDrugPlanForDay.addAll(createDefaultUserDrugPlanItems(drug, user, day));
@@ -44,7 +45,7 @@ public class UserDrugPlanCalculator {
         private List<UserDrugPlan> adjustUserDrugPlanByInteractions(List<UserDrugPlan> userDrugPlanForDay) {
                 final StringBuilder interactionText = new StringBuilder();
                 for (int i = 0; i < userDrugPlanForDay.size() - 1; i++) {
-                        // check interactions between medicaments
+                        // check interactions between drugs
                         // if interaction:
                         final Drug drug = userDrugPlanForDay.get(i).getDrug();
                         for (final Interaction interaction : drug.getInteraction()) {
@@ -54,28 +55,66 @@ public class UserDrugPlanCalculator {
                                                         + interaction.getInteraction() + "</p>");
                                 }
                         }
+                        //TODO: only adjust if NOT onEmptyStomach AND NOT onFullStomach 
+                        //check interactions with next drug
                         if (checkInteraction(userDrugPlanForDay.get(i), userDrugPlanForDay.get(i + 1))) {
+                        	if (checkAdjustmentAllowed(userDrugPlanForDay.get(i + 1))) {
                                 adjustDateTimeIntakePlanned(userDrugPlanForDay.get(i + 1));
+                        	} else if (checkAdjustmentAllowed(userDrugPlanForDay.get(i))) {
+                                adjustDateTimeIntakePlanned(userDrugPlanForDay.get(i + 1));
+                        	}
                         }
                 }
 
                 return getSortedUserDrugPlanByDatetimeIntakePlanned(userDrugPlanForDay);
         }
 
-        /**
-         * add n hours ...
-         *
-         * @param userDrugPlanItemToAdjust
-         */
-        private void adjustDateTimeIntakePlanned(UserDrugPlan userDrugPlanItemToAdjust) {
-                userDrugPlanItemToAdjust
-                                .setDateTimePlanned(addHoursToJavaUtilDate(userDrugPlanItemToAdjust.getDatetimeIntakePlanned(), 2));
-        }
+       private boolean checkAdjustmentAllowed( UserDrugPlan userDrugPlan) {
+    	   if (userDrugPlan.getDrug().getTakeOnEmptyStomach() || userDrugPlan.getDrug().getTakeOnFullStomach()) {
+    		   return false;
+    	   } else {
+    		   return true;
+    	   }
+       }
+       /**
+        * add n hours ...
+        *
+        * @param userDrugPlanItemToAdjust
+        */
+       private void adjustDateTimeIntakePlanned(UserDrugPlan userDrugPlanItemToAdjust) {
+               LOG.info("adjust intake time for {}, current intake time = {}, add hours",
+                               userDrugPlanItemToAdjust.getDrug().getName(), userDrugPlanItemToAdjust.getDatetimeIntakePlanned());
+               userDrugPlanItemToAdjust
+                               .setDateTimePlanned(DateUtils.setHoursOfDate(userDrugPlanItemToAdjust.getDatetimeIntakePlanned(), 2));
+               LOG.info("intake time for {} adjusted: current intake time = {}", userDrugPlanItemToAdjust.getDrug().getName(),
+                               userDrugPlanItemToAdjust.getDatetimeIntakePlanned());
+       }
 
-        private boolean checkInteraction(UserDrugPlan userDrugPlanItem, UserDrugPlan userDrugPlanItem2) {
-                // TODO: constructor with interactions
-                return false;
-        }
+       /**
+        * check interactions between two takings
+        *
+        * @param userDrugPlanItem1 - planned intake 1 with drug 1
+        * @param userDrugPlanItem2 - planned intake 2 with drug 2
+        * @return
+        */
+       private boolean checkInteraction(UserDrugPlan userDrugPlanItem, UserDrugPlan userDrugPlanItem2) {
+               for (final Interaction interaction : userDrugPlanItem.getDrug().getInteraction()) {
+                       if (interaction.getInteractionDrug().contains(userDrugPlanItem2.getDrug())) {
+                               LOG.info("interaction between {} and {]", userDrugPlanItem.getDrug().getName(),
+                                               userDrugPlanItem2.getDrug().getName());
+                               return true;
+                       }
+               }
+               for (final Interaction interaction : userDrugPlanItem2.getDrug().getInteraction()) {
+                       if (interaction.getInteractionDrug().contains(userDrugPlanItem.getDrug())) {
+                               LOG.info("interaction between {} and {]", userDrugPlanItem2.getDrug().getName(),
+                                               userDrugPlanItem.getDrug().getName());
+                               return true;
+                       }
+               }
+               return false;
+       }
+
 
         public Date addHoursToJavaUtilDate(Date date, int hours) {
                 final Calendar calendar = Calendar.getInstance();

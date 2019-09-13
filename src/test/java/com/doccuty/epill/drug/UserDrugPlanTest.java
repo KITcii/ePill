@@ -21,7 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.doccuty.epill.user.UserService;
 import com.doccuty.epill.userdrugplan.UserDrugPlan;
-import com.doccuty.epill.drug.SimpleDrug;;
+import com.doccuty.epill.userdrugplan.UserDrugPlanItemViewModel;;
 
 // Use Spring's testing support in JUnit
 @RunWith(SpringRunner.class)
@@ -69,6 +69,21 @@ public class UserDrugPlanTest {
 		assertNotNull(userDrugPlanList);
 		assertEquals(2, userDrugPlanList.size());
 	}
-	
-	
+
+	@Test
+	@Transactional
+	public void testGetCompleteUserDrugPlansByDate() {
+		LOG.info("testing UserDrugPlan data access by date");
+		final Date dateFrom = new GregorianCalendar(2019, 9 - 1, 12).getTime();
+		final Date dateTo = new GregorianCalendar(2019, 9 - 1, 13).getTime();
+		final List<UserDrugPlanItemViewModel> userDrugPlanList = drugService
+				.getCompleteUserDrugPlansByUserIdAndDate(dateFrom, dateTo);
+		assertNotNull(userDrugPlanList);
+
+		for (final UserDrugPlanItemViewModel viewModel : userDrugPlanList) {
+			System.out.println("date: " + viewModel.getDateString() + "HT: " + viewModel.getPercentage() + "% | time ="
+					+ viewModel.getTimeString() + " | name = " + viewModel.getDrugName() + ", drugsSameTime="
+					+ viewModel.getDrugNamesSameTime());
+		}
+	}
 }

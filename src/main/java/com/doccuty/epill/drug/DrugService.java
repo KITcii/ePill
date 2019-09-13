@@ -1,10 +1,14 @@
 package com.doccuty.epill.drug;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +26,7 @@ import com.doccuty.epill.user.UserService;
 import com.doccuty.epill.userdrugplan.DateUtils;
 import com.doccuty.epill.userdrugplan.UserDrugPlan;
 import com.doccuty.epill.userdrugplan.UserDrugPlanCalculator;
+import com.doccuty.epill.userdrugplan.UserDrugPlanItemViewModel;
 import com.doccuty.epill.userdrugplan.UserDrugPlanRepository;
 
 @Service
@@ -251,6 +256,141 @@ public class DrugService {
 		return userDrugPlans;
 	}
 
+	/**
+	 * get User drug plan between two dates (with intermediate rows each hour
+	 * independent on planned intake of drug)
+	 * 
+	 * @param dateFrom
+	 * @param dateTo
+	 * @return
+	 */
+	public List<UserDrugPlanItemViewModel> getCompleteUserDrugPlansByUserIdAndDate(Date dateFrom, Date dateTo) {
+		final User currentUser = userService.findUserById(userService.getCurrentUser().getId());
+
+		final List<UserDrugPlanItemViewModel> userDrugPlanView = new ArrayList<>();
+		final List<UserDrugPlan> userDrugItemsPlanned = getUserDrugPlansByUserIdAndDate(dateFrom, dateTo);
+		Date lastDateTime = (Date) dateFrom.clone();
+		for (int hour = currentUser.getBreakfastTime(); hour <= currentUser.getDinnerTime() + 2; hour++) {
+			final int hourToCompare = hour;
+			final List<UserDrugPlan> plannedItemsForHour = userDrugItemsPlanned.stream().parallel()
+					.filter(p -> DateUtils.getHours(p.getDatetimeIntakePlanned()) == hourToCompare)
+					.collect(Collectors.toList());
+			if (!plannedItemsForHour.isEmpty()) {
+				// Collect all items in one String, take the longest halftime period
+				lastDateTime = (Date) plannedItemsForHour.get(0).getDatetimeIntakePlanned().clone();
+				String drugNames = plannedItemsForHour.get(0).getDrug().getName();
+				int halfTimePeriodMax = plannedItemsForHour.get(0).getDrug().getPeriod();
+				if (plannedItemsForHour.size() > 1) {
+					for (int i = 1; i < plannedItemsForHour.size(); i++) {
+						drugNames = String.format("%s, %s", drugNames, plannedItemsForHour.get(i).getDrug().getName());
+						if (halfTimePeriodMax < plannedItemsForHour.get(i).getDrug().getPeriod()) {
+							halfTimePeriodMax = plannedItemsForHour.get(i).getDrug().getPeriod();
+						}
+					}
+				}
+				userDrugPlanView.add(mapUserDrugPlanToView(plannedItemsForHour.get(0), drugNames, halfTimePeriodMax));
+			} else {
+				// intermediate step
+				final UserDrugPlan userDrugPlanItemIntermediate = new UserDrugPlan();
+				userDrugPlanItemIntermediate.setUser(currentUser);
+				userDrugPlanItemIntermediate.setDateTimePlanned(DateUtils.setHoursOfDate(lastDateTime, hour));
+				userDrugPlanView.add(mapUserDrugPlanToView(userDrugPlanItemIntermediate, "", 0));
+			}
+		}
+		LOG.info("items={} in UserDrugPlan with intermediate steps", userDrugPlanView.size());
+		return setHalftimeAndPercentagePerDrugPlanItem(userDrugPlanView);
+	}
+
+	/**
+	 * map UserDrugPlan to UserDrugPlanItemViewModel
+	 * 
+	 * @param userDrugPlanItem
+	 * @param drugNamesSameTime
+	 * @param halfTimePeriodMax
+	 * @return
+	 */
+	private UserDrugPlanItemViewModel mapUserDrugPlanToView(UserDrugPlan userDrugPlanItem, String drugNamesSameTime,
+			int halfTimePeriodMax) {
+		final UserDrugPlanItemViewModel model = new UserDrugPlanItemViewModel();
+		final Calendar calendar = GregorianCalendar.getInstance();
+		calendar.setTime(userDrugPlanItem.getDatetimeIntakePlanned());
+		model.setTimeString(String.format("%02d:00", calendar.get(Calendar.HOUR_OF_DAY)));
+		final SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+		model.setDateString(format.format(calendar.getTime()));
+		if (userDrugPlanItem.getId() <= 0) {
+			// Intermediate Step
+			model.setDrugName("");
+			model.setIntake(false);
+			model.setIntermediateStep(true);
+			model.setTakeOnEmptyStomach(false);
+			model.setTakeOnFullStomach(false);
+			model.setPercentage(0);
+			model.setHalfTimePeriod(0);
+		} else {
+			// intake 1 or more drugs
+			model.setDrugName(userDrugPlanItem.getDrug().getName());
+			model.setDrugNamesSameTime(drugNamesSameTime);
+			model.setIntake(true);
+			model.setIntermediateStep(false);
+			model.setTakeOnEmptyStomach(userDrugPlanItem.getDrug().getTakeOnEmptyStomach());
+			model.setTakeOnFullStomach(userDrugPlanItem.getDrug().getTakeOnFullStomach());
+			model.setPercentage(100);
+			model.setHalfTimePeriod(halfTimePeriodMax);
+		}
+		return model;
+	}
+
+	/**
+	 * set halftime period and percentage for intermediate steps depending on drugs
+	 * taken
+	 * 
+	 * @param completePlanWithIntermediateSteps
+	 * @return
+	 */
+	private List<UserDrugPlanItemViewModel> setHalftimeAndPercentagePerDrugPlanItem(
+			List<UserDrugPlanItemViewModel> completePlanWithIntermediateSteps) {
+		final List<UserDrugPlanItemViewModel> viewModel = new ArrayList<>();
+		int currentHalfTimePeriod = 0;
+		int currentPercentage = 0;
+		for (final UserDrugPlanItemViewModel model : completePlanWithIntermediateSteps) {
+			if (model.isIntermediateStep()) {
+				// Intermediate Step
+				model.setPercentage(setPercentage(currentHalfTimePeriod, currentPercentage));
+				currentPercentage = model.getPercentage();
+				model.setHalfTimePeriod(0);
+				viewModel.add(model);
+			} else {
+				// intake
+				model.setPercentage(100);
+				currentPercentage = model.getPercentage();
+				currentHalfTimePeriod = model.getHalfTimePeriod();
+				viewModel.add(model);
+			}
+		}
+//			private final String hints;
+//			private final boolean hasInteractions;
+		return viewModel;
+	}
+
+	private int setPercentage(int halfTimePeriod, int currentPercentage) {
+		if (halfTimePeriod == 0) {
+			return 0;
+		} else {
+			if ((currentPercentage - 50 / halfTimePeriod) > 0) {
+				return currentPercentage - 50 / halfTimePeriod;
+			} else {
+				return 0;
+			}
+		}
+	}
+
+	/**
+	 * get User drug plan between two dates (only for planned intake timestamps)
+	 * 
+	 * @param dateFrom
+	 * @param dateTo
+	 * @return
+	 */
 	public List<UserDrugPlan> getUserDrugPlansByUserIdAndDate(Date dateFrom, Date dateTo) {
 
 		final Long userId = userService.getCurrentUser().getId();
