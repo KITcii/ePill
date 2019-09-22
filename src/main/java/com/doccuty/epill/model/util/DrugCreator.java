@@ -69,7 +69,8 @@ public class DrugCreator implements SendableEntityCreatorNoIndex
       Drug.PROPERTY_VERSION,
       Drug.PROPERTY_HALF_TIME_PERIOD,
       Drug.PROPERTY_TAKE_ON_EMPTY_STOMACH,
-      Drug.PROPERTY_TAKE_ON_FULL_STOMACH
+      Drug.PROPERTY_TAKE_ON_FULL_STOMACH,
+      Drug.PROPERTY_TAKE_TO_MEALS
    };
    
    @Override
@@ -208,6 +209,11 @@ public class DrugCreator implements SendableEntityCreatorNoIndex
       if (Drug.PROPERTY_TAKE_ON_FULL_STOMACH.equalsIgnoreCase(attribute))
       {
          return ((Drug) target).getTakeOnFullStomach();
+      }
+      
+      if (Drug.PROPERTY_TAKE_TO_MEALS.equalsIgnoreCase(attribute))
+      {
+         return ((Drug) target).getTakeToMeals();
       }
       
       if (Drug.PROPERTY_COUNT_PER_DAY.equalsIgnoreCase(attribute))
@@ -410,6 +416,12 @@ public class DrugCreator implements SendableEntityCreatorNoIndex
       if (Drug.PROPERTY_TAKE_ON_FULL_STOMACH.equalsIgnoreCase(attrName))
       {
     	  ((Drug) target).setTakeOnFullStomach((boolean) value);
+          return true;
+      }
+      
+      if (Drug.PROPERTY_TAKE_TO_MEALS.equalsIgnoreCase(attrName))
+      {
+    	  ((Drug) target).setTakeToMeals((boolean) value);
           return true;
       }
       

@@ -71,8 +71,8 @@ class MedicationPlan extends React.Component {
                                 <td className="td-style">
                                         <input type="checkbox" value=""></input>
                                 </td>
-                                        <td className="td-style">{this.formatDate(drugplanned.datetime_intake_planned)}</td>
-                                    <td className="td-style">{drugplanned.drug.name}</td>
+                                <td className="td-style">{this.formatDate(drugplanned.datetime_intake_planned)}</td>
+                                <td className="td-style">{drugplanned.drug.name}</td>
                                 </tr>                   
             );
         });

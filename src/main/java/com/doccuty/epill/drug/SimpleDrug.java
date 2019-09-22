@@ -419,6 +419,35 @@ import de.uniks.networkparser.EntityUtil;
 //      return this;
 //   }
    
+
+//==========================================================================
+   
+   public static final String PROPERTY_TAKE_TO_MEALS = "taketomeals";
+   
+   @Column(name = "take_to_meals")
+   private boolean takeToMeals;
+
+   public boolean getTakeToMeals()
+   {
+      return this.takeToMeals;
+   }
+   
+   public void setTakeToMeals(boolean value)
+   {
+      if (this.takeToMeals != value) {
+      
+         boolean oldValue = this.takeToMeals;
+         this.takeToMeals = value;
+         this.firePropertyChange(PROPERTY_TAKE_TO_MEALS, oldValue, value);
+      }
+   }
+   
+//   public SimpleDrug withTakeToMeals(boolean value)
+//   {
+//	   setTakeToMeals(value);
+//      return this;
+//   }
+   
 //==========================================================================
    
    public static final String PROPERTY_COUNT_PER_DAY = "countperday";

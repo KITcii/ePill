@@ -15,8 +15,11 @@ public class UserDrugPlanItemViewModel {
 	private boolean hasInteractions;
 	private boolean takeOnEmptyStomach;
 	private boolean takeOnFullStomach;
+	private boolean takeToMeals;
 	private int halfTimePeriod;
 	private int percentage;
+	private String personalizedInformation;
+	private String drugDiseases;
 
 	public boolean isIntermediateStep() {
 		return intermediateStep;
@@ -112,5 +115,29 @@ public class UserDrugPlanItemViewModel {
 
 	public void setHalfTimePeriod(int halfTimePeriod) {
 		this.halfTimePeriod = halfTimePeriod;
+	}
+
+	public String getPersonalizedInformation() {
+		return personalizedInformation;
+	}
+
+	public void setPersonalizedInformation(String personalizedInformation) {
+		this.personalizedInformation = personalizedInformation;
+	}
+
+	public boolean isTakeToMeals() {
+		return takeToMeals;
+	}
+
+	public void setTakeToMeals(boolean takeToMeals) {
+		this.takeToMeals = takeToMeals;
+	}
+
+	public String getDrugDiseases() {
+		return drugDiseases;
+	}
+
+	public void setDrugDiseases(String drugDiseases) {
+		this.drugDiseases = drugDiseases;
 	}
 }

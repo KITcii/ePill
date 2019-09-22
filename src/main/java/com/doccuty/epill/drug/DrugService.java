@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.doccuty.epill.disease.Disease;
 import com.doccuty.epill.iteminvocation.ItemInvocation;
 import com.doccuty.epill.iteminvocation.ItemInvocationRepository;
 import com.doccuty.epill.model.DrugFeature;
@@ -279,22 +280,35 @@ public class DrugService {
 				// Collect all items in one String, take the longest halftime period
 				lastDateTime = (Date) plannedItemsForHour.get(0).getDatetimeIntakePlanned().clone();
 				String drugNames = plannedItemsForHour.get(0).getDrug().getName();
+				String personalizedInformation = this.tailoringService.getTailoredMinimumSummaryByDrugAndUser(plannedItemsForHour.get(0).getDrug(), currentUser).getText();
+				List <Disease> gettingDiseases = plannedItemsForHour.get(0).getDrug().getDisease();
+				String drugDiseases = "";
+				for (int j = 0; j < gettingDiseases.size(); j++) {
+					drugDiseases = drugDiseases + " " + gettingDiseases.get(j).getName();
+				}
 				int halfTimePeriodMax = plannedItemsForHour.get(0).getDrug().getPeriod();
 				if (plannedItemsForHour.size() > 1) {
 					for (int i = 1; i < plannedItemsForHour.size(); i++) {
 						drugNames = String.format("%s, %s", drugNames, plannedItemsForHour.get(i).getDrug().getName());
+						personalizedInformation = String.format("%s, %s", personalizedInformation, this.tailoringService.getTailoredMinimumSummaryByDrugAndUser(plannedItemsForHour.get(i).getDrug(), currentUser).getText());
+						List <Disease> diseasesDrugi = plannedItemsForHour.get(i).getDrug().getDisease();
+						String drugjDiseases = "";
+						for (int j = 0; j < diseasesDrugi.size(); j++) {
+							drugjDiseases = drugjDiseases + " " + diseasesDrugi.get(j).getName();
+						}
+						drugDiseases = String.format("%s, %s", drugDiseases, drugjDiseases); 
 						if (halfTimePeriodMax < plannedItemsForHour.get(i).getDrug().getPeriod()) {
 							halfTimePeriodMax = plannedItemsForHour.get(i).getDrug().getPeriod();
 						}
 					}
 				}
-				userDrugPlanView.add(mapUserDrugPlanToView(plannedItemsForHour.get(0), drugNames, halfTimePeriodMax));
+				userDrugPlanView.add(mapUserDrugPlanToView(plannedItemsForHour.get(0), drugNames, halfTimePeriodMax, personalizedInformation, drugDiseases));
 			} else {
 				// intermediate step
 				final UserDrugPlan userDrugPlanItemIntermediate = new UserDrugPlan();
 				userDrugPlanItemIntermediate.setUser(currentUser);
 				userDrugPlanItemIntermediate.setDateTimePlanned(DateUtils.setHoursOfDate(lastDateTime, hour));
-				userDrugPlanView.add(mapUserDrugPlanToView(userDrugPlanItemIntermediate, "", 0));
+				userDrugPlanView.add(mapUserDrugPlanToView(userDrugPlanItemIntermediate, "", 0, "", ""));
 			}
 		}
 		LOG.info("items={} in UserDrugPlan with intermediate steps", userDrugPlanView.size());
@@ -307,10 +321,11 @@ public class DrugService {
 	 * @param userDrugPlanItem
 	 * @param drugNamesSameTime
 	 * @param halfTimePeriodMax
+	 * @param halfTimePeriodMax
 	 * @return
 	 */
 	private UserDrugPlanItemViewModel mapUserDrugPlanToView(UserDrugPlan userDrugPlanItem, String drugNamesSameTime,
-			int halfTimePeriodMax) {
+			int halfTimePeriodMax, String personalizedDrugInformation, String drugDiseases) {
 		final UserDrugPlanItemViewModel model = new UserDrugPlanItemViewModel();
 		final Calendar calendar = GregorianCalendar.getInstance();
 		calendar.setTime(userDrugPlanItem.getDatetimeIntakePlanned());
@@ -326,6 +341,7 @@ public class DrugService {
 			model.setTakeOnFullStomach(false);
 			model.setPercentage(0);
 			model.setHalfTimePeriod(0);
+			model.setPersonalizedInformation("");
 		} else {
 			// intake 1 or more drugs
 			model.setDrugName(userDrugPlanItem.getDrug().getName());
@@ -336,6 +352,8 @@ public class DrugService {
 			model.setTakeOnFullStomach(userDrugPlanItem.getDrug().getTakeOnFullStomach());
 			model.setPercentage(100);
 			model.setHalfTimePeriod(halfTimePeriodMax);
+			model.setPersonalizedInformation(personalizedDrugInformation);
+			model.setDrugDiseases(drugDiseases);
 		}
 		return model;
 	}

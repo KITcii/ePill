@@ -101,9 +101,10 @@ class MedicationPlanView extends React.Component {
                             <td></td>
                             <td></td>
                             <td>
-                              used when: fever
-                              <p className="information"><span class="glyphicon glyphicon-info-sign"></span> no grapefruits</p>
-                              <p className="information"><span class="glyphicon glyphicon-info-sign"></span> no driving</p>
+                            <p>{"used when: "+drugplanned.drugDiseases}</p>	
+                              <p className="information"><span class="glyphicon glyphicon-info-sign"></span> {drugplanned.takeOnEmptyStomach ? "take on an empty stomach" : ""}</p>
+                              <p className="information"><span class="glyphicon glyphicon-info-sign"></span> {drugplanned.takeOnFullStomach ? "take on a full stomach" : ""}</p>
+                              {drugplanned.personalizedInformation && <section className="minimum-summary" dangerouslySetInnerHTML={this.createMarkup(drugplanned.personalizedInformation)} />}
                             </td>
                             <td></td>
                         </tr>
