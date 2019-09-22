@@ -57,7 +57,12 @@ public class UserCreator implements SendableEntityCreatorNoIndex
       //User.PROPERTY_CLICKS,
       //User.PROPERTY_QUERY,
       User.PROPERTY_DISEASE,
-      User.PROPERTY_REDGREENCOLORBLIND
+      User.PROPERTY_REDGREENCOLORBLIND,
+      User.PROPERTY_WEIGHT,
+      User.PROPERTY_BREAKFAST_TIME,
+      User.PROPERTY_LUNCH_TIME,
+      User.PROPERTY_DINNER_TIME
+
    };
    
    @Override
@@ -182,6 +187,26 @@ public class UserCreator implements SendableEntityCreatorNoIndex
       {
          return ((User) target).getDisease();
       }
+
+      if (User.PROPERTY_WEIGHT.equalsIgnoreCase(attribute))
+      {
+         return ((User) target).getWeight();
+      }
+      
+      if (User.PROPERTY_BREAKFAST_TIME.equalsIgnoreCase(attribute))
+      {
+         return ((User) target).getBreakfastTime();
+      }
+      
+      if (User.PROPERTY_LUNCH_TIME.equalsIgnoreCase(attribute))
+      {
+         return ((User) target).getLunchTime();
+      }
+      
+      if (User.PROPERTY_DINNER_TIME.equalsIgnoreCase(attribute))
+      {
+         return ((User) target).getDinnerTime();
+      }
       
       return null;
    }
@@ -246,6 +271,30 @@ public class UserCreator implements SendableEntityCreatorNoIndex
       if (User.PROPERTY_FIRSTNAME.equalsIgnoreCase(attrName))
       {
          ((User) target).setFirstname((String) value);
+         return true;
+      }
+
+      if (User.PROPERTY_WEIGHT.equalsIgnoreCase(attrName))
+      {
+         ((User) target).setWeight((int) value);
+         return true;
+      }
+      
+      if (User.PROPERTY_BREAKFAST_TIME.equalsIgnoreCase(attrName))
+      {
+         ((User) target).setBreakfastTime((int) value);
+         return true;
+      }
+      
+      if (User.PROPERTY_LUNCH_TIME.equalsIgnoreCase(attrName))
+      {
+         ((User) target).setLunchTime((int) value);
+         return true;
+      }
+      
+      if (User.PROPERTY_DINNER_TIME.equalsIgnoreCase(attrName))
+      {
+         ((User) target).setDinnerTime((int) value);
          return true;
       }
       
